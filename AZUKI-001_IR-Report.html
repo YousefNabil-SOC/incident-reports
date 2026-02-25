@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AZUKI-001 — Yousef Nabil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:        #080a0d;
+  --bg2:       #0c0f14;
+  --surface:   #101520;
+  --surface2:  #141a24;
+  --border:    rgba(255,200,80,0.07);
+  --border2:   rgba(255,200,80,0.14);
+  --border3:   rgba(255,200,80,0.25);
+  --amber:     #f0a500;
+  --amber-dim: rgba(240,165,0,0.10);
+  --amber-glow:rgba(240,165,0,0.04);
+  --red:       #e84040;
+  --red-dim:   rgba(232,64,64,0.12);
+  --green:     #2ecc71;
+  --green-dim: rgba(46,204,113,0.10);
+  --blue:      #4a9eff;
+  --text:      #d4d8e0;
+  --text2:     #7a8090;
+  --text3:     #3a4050;
+  --mono:      'JetBrains Mono', monospace;
+  --cond:      'Barlow Condensed', sans-serif;
+  --sans:      'Barlow', sans-serif;
+  --nav-w:     220px;
+  --top-h:     48px;
+  --radius:    4px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-size:14px; scroll-behavior:smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* dot grid background */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: radial-gradient(circle, rgba(255,200,80,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  height:var(--top-h);
+  background: rgba(8,10,13,0.96);
+  border-bottom:1px solid var(--border2);
+  backdrop-filter: blur(10px);
+  display:flex; align-items:center;
+  padding:0 24px; gap:16px;
+}
+.tb-analyst {
+  display:flex; flex-direction:column; gap:1px;
+  border-right:1px solid var(--border2);
+  padding-right:16px;
+}
+.tb-name {
+  font-family:var(--cond); font-size:15px; font-weight:700;
+  color:var(--text); letter-spacing:.3px;
+}
+.tb-role {
+  font-family:var(--mono); font-size:8.5px; font-weight:400;
+  letter-spacing:1.8px; text-transform:uppercase; color:var(--text3);
+}
+.tb-mid { flex:1; display:flex; align-items:center; gap:20px; }
+.tb-id {
+  font-family:var(--mono); font-size:11px; color:var(--text3);
+  letter-spacing:.5px;
+}
+.tb-title {
+  font-family:var(--cond); font-size:13px; font-weight:500;
+  color:var(--text2); letter-spacing:.3px;
+  flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.sev {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:3px 10px; border-radius:2px;
+}
+.sev-critical { background:var(--red); color:#fff; }
+.sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
+
+/* ── LAYOUT ── */
+.layout { display:flex; padding-top:var(--top-h); position:relative; z-index:1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--nav-w); flex-shrink:0;
+  position:fixed; top:var(--top-h); bottom:0; left:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border2);
+  overflow-y:auto; padding:20px 0 40px;
+  scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+}
+.nav-section-label {
+  font-family:var(--mono); font-size:8px; font-weight:500;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--text3); padding:0 18px 8px;
+}
+.nav-link {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 18px; text-decoration:none;
+  color:var(--text3); font-size:12px; font-weight:400;
+  font-family:var(--sans);
+  border-left:2px solid transparent;
+  transition:all .12s ease;
+  cursor:pointer;
+}
+.nav-link:hover { color:var(--text2); background:var(--amber-glow); }
+.nav-link.active {
+  color:var(--amber); border-left-color:var(--amber);
+  background:var(--amber-dim); font-weight:500;
+}
+.nav-idx {
+  font-family:var(--mono); font-size:9px; color:var(--text3);
+  min-width:16px;
+}
+.nav-link.active .nav-idx { color:var(--amber); opacity:.6; }
+
+/* ── MAIN ── */
+.main {
+  margin-left:var(--nav-w);
+  flex:1; min-width:0;
+  padding:36px 48px 80px 44px;
+  max-width:880px;
+}
+
+/* ── COVER ── */
+.cover {
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--amber);
+  border-radius:var(--radius);
+  padding:36px 40px;
+  margin-bottom:28px;
+  position:relative; overflow:hidden;
+}
+.cover::after {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:200px; height:200px;
+  background: radial-gradient(circle at top right, rgba(240,165,0,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-eyebrow {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--amber); opacity:.7; margin-bottom:10px;
+}
+.cover-title {
+  font-family:var(--cond); font-size:28px; font-weight:700;
+  color:var(--text); line-height:1.15; margin-bottom:4px;
+  letter-spacing:.3px;
+}
+.cover-sub {
+  font-size:12.5px; color:var(--text2); margin-bottom:26px;
+  letter-spacing:.3px;
+}
+.meta-row {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap:6px;
+}
+.meta-item {
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:8px 11px;
+}
+.meta-key {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:3px;
+}
+.meta-val {
+  font-size:12.5px; font-weight:500; color:var(--text);
+}
+.meta-val.crit { color:#fca5a5; }
+.meta-val.high { color:var(--amber); }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom:2px;
+  scroll-margin-top:calc(var(--top-h) + 16px);
+}
+.section-header {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 0 10px;
+  border-bottom:1px solid var(--border2);
+  margin-bottom:16px;
+}
+.sh-num {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  color:var(--amber); opacity:.5; min-width:24px;
+}
+.sh-title {
+  font-family:var(--cond); font-size:13px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
+}
+.section-body { padding-bottom:24px; }
+
+/* ── SUBSECTION ── */
+.sub { margin:14px 0 10px; }
+.sub-label {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:1.8px; text-transform:uppercase;
+  color:var(--amber); opacity:.65;
+  padding-bottom:6px; margin-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ── PROSE ── */
+.p {
+  font-size:13px; line-height:1.75; color:var(--text2);
+  margin-bottom:10px;
+}
+.p strong { color:var(--text); font-weight:600; }
+.p + .p { margin-top:-4px; }
+
+/* ── TABLE ── */
+.tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:rgba(240,165,0,0.06); }
+thead th {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.2px; text-transform:uppercase;
+  color:var(--amber); opacity:.8;
+  padding:9px 13px; text-align:left;
+  border-bottom:1px solid var(--border2);
+  white-space:nowrap;
+}
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover td { background:var(--amber-glow); }
+td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; }
+
+/* ── LIST ── */
+.bl {
+  list-style:none;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden; margin:6px 0;
+}
+.bl li {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:8px 14px 8px 12px;
+  font-size:12.5px; color:var(--text2);
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  line-height:1.55;
+  transition:all .1s ease;
+}
+.bl li:last-child { border-bottom:none; }
+.bl li::before { content:'›'; color:var(--amber); opacity:.5; font-size:15px; line-height:1.3; flex-shrink:0; margin-top:-1px; }
+.bl li:hover { background:var(--amber-glow); border-left-color:rgba(240,165,0,.2); }
+.bl strong { color:var(--text); font-weight:600; }
+
+/* ── TIMELINE ── */
+.tl { padding-left:20px; position:relative; margin:8px 0; }
+.tl::before {
+  content:''; position:absolute; left:5px; top:6px; bottom:6px;
+  width:1px;
+  background:linear-gradient(to bottom, var(--amber), transparent);
+  opacity:.3;
+}
+.tl-row {
+  display:flex; gap:16px;
+  padding:7px 0;
+  position:relative;
+}
+.tl-row::before {
+  content:''; position:absolute; left:-17px; top:13px;
+  width:7px; height:7px; border-radius:50%;
+  background:var(--bg2); border:1.5px solid var(--amber);
+  opacity:.6;
+}
+.tl-t {
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  color:var(--amber); opacity:.8;
+  min-width:136px; flex-shrink:0; padding-top:1px;
+}
+.tl-e {
+  font-size:12.5px; color:var(--text2); flex:1; line-height:1.5;
+}
+.tl-e strong { color:var(--text); }
+
+/* ── PHASE ── */
+.phase { margin:10px 0; }
+.phase-tag {
+  display:inline-flex; align-items:center;
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  color:var(--text2); background:var(--surface2);
+  border:1px solid var(--border2); border-radius:2px;
+  padding:3px 9px; margin-bottom:6px;
+}
+
+/* ── KQL ── */
+.kql { margin:12px 0; }
+.kql-hd {
+  font-size:11px; color:var(--text2);
+  margin-bottom:5px; padding-left:1px;
+}
+.kql-hd b {
+  font-family:var(--mono); font-size:10.5px;
+  color:var(--amber); font-weight:600; opacity:.9;
+}
+.kql-wrap {
+  background:#05080d;
+  border:1px solid rgba(240,165,0,0.15);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.kql-bar {
+  background:rgba(240,165,0,0.05);
+  border-bottom:1px solid rgba(240,165,0,0.1);
+  padding:5px 13px;
+  display:flex; align-items:center; gap:8px;
+}
+.kql-dots { display:flex; gap:4px; }
+.kql-dots i { width:7px; height:7px; border-radius:50%; background:var(--border2); }
+.kql-tag {
+  font-family:var(--mono); font-size:8px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--amber); opacity:.5;
+}
+.kql-wrap pre {
+  font-family:var(--mono); font-size:11.5px;
+  color:#b3c3e0; line-height:1.7;
+  padding:12px 14px;
+  overflow-x:auto; tab-size:2;
+}
+.kql-wrap pre .pipe { color:var(--text3); }
+.kql-wrap pre .kw   { color:#c084fc; }
+.kql-wrap pre .fn   { color:#60a5fa; }
+.kql-wrap pre .str  { color:#86efac; }
+
+/* ── IMPACT ── */
+.impact-row {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:9px 13px;
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  font-size:12.5px; color:var(--text2); line-height:1.5;
+}
+.impact-row:first-child { border-radius:var(--radius) var(--radius) 0 0; }
+.impact-row:last-child  { border-bottom:none; border-radius:0 0 var(--radius) var(--radius); }
+.impact-row.conf { border-left-color:var(--red); }
+.impact-wrap { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:6px 0; background:var(--surface); }
+.ibadge {
+  font-family:var(--mono); font-size:8px; font-weight:700;
+  letter-spacing:1.2px; text-transform:uppercase;
+  padding:2px 6px; border-radius:2px; white-space:nowrap;
+  margin-top:2px; flex-shrink:0;
+}
+.ibadge.conf { background:var(--red-dim); color:var(--red); }
+.ibadge.risk { background:var(--amber-dim); color:var(--amber); }
+.impact-row strong { color:var(--text); }
+
+/* ── RISK BANNER ── */
+.risk {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:11px 14px;
+  border-radius:var(--radius);
+  border:1px solid; margin:10px 0;
+  font-size:12.5px; line-height:1.55;
+}
+.risk.critical { background:var(--red-dim); border-color:rgba(232,64,64,.25); color:var(--text2); }
+.risk.high     { background:var(--amber-dim); border-color:rgba(240,165,0,.25); color:var(--text2); }
+.risk-lbl {
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  white-space:nowrap; margin-top:2px; flex-shrink:0;
+}
+.risk.critical .risk-lbl { color:var(--red); }
+.risk.high .risk-lbl     { color:var(--amber); }
+.risk strong { color:var(--text); }
+
+/* ── RECS ── */
+.rec-grp { margin:10px 0; }
+.rec-badge {
+  display:inline-flex; font-family:var(--mono); font-size:8.5px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:2px; margin-bottom:6px;
+}
+.rb-now   { background:var(--red-dim); color:var(--red); }
+.rb-short { background:var(--amber-dim); color:var(--amber); }
+.rb-long  { background:var(--green-dim); color:var(--green); }
+
+/* ── FOOTER ── */
+.foot {
+  margin-top:24px; padding-top:18px;
+  border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:9.5px; color:var(--text3);
+}
+.foot-conf { color:var(--red); opacity:.5; font-weight:700; letter-spacing:2px; }
+
+code {
+  font-family:var(--mono); font-size:11px;
+  color:#93c5fd; background:rgba(74,158,255,0.1);
+  padding:1px 5px; border-radius:2px;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+.bl li { flex-wrap: wrap; }
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="tb-analyst">
+    <span class="tb-name">Yousef Nabil</span>
+    <span class="tb-role">Incident Response Analyst</span>
+  </div>
+  <div class="tb-mid">
+    <span class="tb-id">AZUKI-001</span>
+    <span class="tb-title">Azuki Import/Export — Targeted Intrusion</span>
+    <span class="sev sev-high">HIGH</span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="nav-section-label">Navigation</div>
+<a class="nav-link" href="#summary"><span class="nav-idx">01</span>Executive Summary</a>
+<a class="nav-link" href="#who"><span class="nav-idx">02</span>WHO</a>
+<a class="nav-link" href="#what"><span class="nav-idx">03</span>WHAT</a>
+<a class="nav-link" href="#when"><span class="nav-idx">04</span>WHEN</a>
+<a class="nav-link" href="#where"><span class="nav-idx">05</span>WHERE</a>
+<a class="nav-link" href="#why"><span class="nav-idx">06</span>WHY</a>
+<a class="nav-link" href="#how"><span class="nav-idx">07</span>HOW</a>
+<a class="nav-link" href="#impact"><span class="nav-idx">08</span>Impact</a>
+<a class="nav-link" href="#intel"><span class="nav-idx">09</span>Threat Intel</a>
+<a class="nav-link" href="#recs"><span class="nav-idx">10</span>Recommendations</a>
+<a class="nav-link" href="#lessons"><span class="nav-idx">11</span>Lessons Learned</a>
+<a class="nav-link" href="#kql"><span class="nav-idx">12</span>KQL Queries</a>
+</aside>
+
+<main class="main">
+<div class="cover">
+  <div class="cover-eyebrow">Incident Response Report</div>
+  <div class="cover-title">Azuki Import/Export<br><span style="font-weight:300;font-size:.65em;color:var(--text2)">梓貿易株式会社</span></div>
+  <div class="cover-sub">AZUKI-001 &nbsp;·&nbsp; Targeted Intrusion &nbsp;·&nbsp; 2025-11-19</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-key">Incident ID</div><div class="meta-val">AZUKI-001</div></div>
+    <div class="meta-item"><div class="meta-key">Date of Report</div><div class="meta-val">February 17, 2026</div></div>
+    <div class="meta-item"><div class="meta-key">Severity</div><div class="meta-val high">HIGH</div></div>
+    <div class="meta-item"><div class="meta-key">Report Status</div><div class="meta-val">Complete</div></div>
+    <div class="meta-item"><div class="meta-key">Escalated To</div><div class="meta-val">Josh — Cyber Range Community</div></div>
+    <div class="meta-item"><div class="meta-key">Analyst</div><div class="meta-val">Yousef Nabil</div></div>
+    <div class="meta-item"><div class="meta-key">Dwell Time (observed)</div><div class="meta-val">~34 min (18:37–19:11 UTC)</div></div>
+  </div>
+</div>
+
+<div class="section" id="summary">
+<div class="section-header">
+  <span class="sh-num">01</span>
+  <span class="sh-title">Executive Summary</span>
+</div>
+<div class="section-body"><p class="p">Azuki Import/Export (梓貿易株式会社) investigated a targeted intrusion consistent with corporate espionage after a competitor undercut a long-term supplier contract by exactly 3% and supplier contracts/pricing data later appeared on underground forums. The compromise centered on the IT admin workstation azuki-sl during the window 2025-11-19 → 2025-11-20 (UTC), reconstructed using Microsoft Defender for Endpoint telemetry in Microsoft Sentinel across DeviceLogonEvents, DeviceProcessEvents, DeviceRegistryEvents, DeviceNetworkEvents, and DeviceFileEvents.</p><p class="p">Telemetry confirmed successful RemoteInteractive (RDP) access to azuki-sl from the external IP 88.97.178.12 using the account kenji.sato. Following access, the threat actor moved quickly into tool transfer and environment preparation. At 18:37 UTC, PowerShell retrieved wupdate.ps1 from 78.141.196.6:8080, followed by additional script retrieval (wupdate.bat) between 18:46–18:49 UTC. During the same phase, Windows Defender posture was intentionally weakened by adding exclusions for .ps1, .bat, and .exe extensions and excluding the user Temp path (<code>C:\Users\KENJI~1.SAT\AppData\Local\Temp</code>) to reduce inspection of attacker tooling and execution artefacts.</p><p class="p">With defenses softened, the actor performed interactive reconnaissance (ipconfig /all and arp -a) at 19:03–19:04 UTC, then established a dedicated staging area by hiding <code>C:\ProgramData\WindowsCache</code> at 19:05 UTC using attrib +h +s. Tooling was downloaded via LOLBIN abuse (certutil -urlcache -f) between 19:06–19:07 UTC, writing payloads as svchost.exe and mm.exe. Persistence was added at 19:07 UTC through a scheduled task named "Windows Update Check" executing <code>C:\ProgramData\WindowsCache\svchost.exe</code> daily at 02:00 as SYSTEM. Network telemetry differentiated staging versus C2: :8080 tied to PowerShell/certutil downloads, :443 tied to the staged payload (svchost.exe).</p><p class="p">At 19:08 UTC, the actor executed mm.exe with command-line indicators consistent with Mimikatz usage (privilege::debug sekurlsa::logonpasswords) to extract credential material from LSASS. At 19:09 UTC, export-data.zip was exfiltrated from <code>C:\ProgramData\WindowsCache</code> via curl to a Discord webhook. At 19:10 UTC, the actor staged credentials for 10.1.0.188 using cmdkey (fileadmin) then initiated RDP via mstsc. The sequence concluded at 19:11 UTC with <code>wevtutil cl Security</code>.</p><p class="p"><strong>Impact:</strong> Confirmed data exfiltration (export-data.zip), confirmed credential dumping activity (sekurlsa::logonpasswords), persistence established (scheduled task and documented backdoor local account support), Windows Defender exclusions applied, and Security log cleared to degrade forensic visibility.</p></div>
+</div>
+<div class="section" id="who">
+<div class="section-header">
+  <span class="sh-num">02</span>
+  <span class="sh-title">WHO</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">External IPs</div><div class="tbl-outer"><table><thead><tr><th>IP Address</th><th>Role</th><th>Location</th><th>ASN / Org</th><th>Type</th></tr></thead><tbody><tr><td>88.97.178.12</td><td>Initial access source (RDP)</td><td>London, England, UK</td><td>AS51809 — BRSK Limited</td><td>DSL / Residential</td></tr><tr><td>78.141.196.6</td><td>Tool staging + C2 server</td><td>London, England, UK</td><td>AS20473 — Vultr Holdings LLC</td><td>Hosting (VPS)</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Attacker Infrastructure</div><div class="tbl-outer"><table><thead><tr><th>Indicator</th><th>Role</th><th>Notes</th></tr></thead><tbody><tr><td>78.141.196.6:8080</td><td>Payload/script delivery</td><td>:8080 correlated with PowerShell/certutil downloads</td></tr><tr><td>78.141.196.6:443</td><td>C2 / beaconing</td><td>:443 correlated with staged svchost.exe outbound communications</td></tr><tr><td>discord.com/api/webhooks/...</td><td>Exfiltration endpoint</td><td>curl upload of export-data.zip</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Accounts Used</div><div class="tbl-outer"><table><thead><tr><th>Account</th><th>Type</th><th>Usage Observed</th></tr></thead><tbody><tr><td>kenji.sato</td><td>User account</td><td>Successful RDP RemoteInteractive logon from 88.97.178.12</td></tr><tr><td>support</td><td>Local backdoor</td><td>Documented backdoor local account</td></tr><tr><td>fileadmin</td><td>Lateral movement target</td><td>cmdkey credential staging + mstsc to 10.1.0.188</td></tr><tr><td>SYSTEM</td><td>Local system</td><td>Scheduled task execution context</td></tr></tbody></table></div></div></div>
+</div>
+<div class="section" id="what">
+<div class="section-header">
+  <span class="sh-num">03</span>
+  <span class="sh-title">WHAT</span>
+</div>
+<div class="section-body"><ul class="bl"><li>Threat actor accessed azuki-sl via RDP (RemoteInteractive) from 88.97.178.12 using kenji.sato.</li><li>Threat actor downloaded <code>wupdate.ps1</code> from <code>http://78.141.196.6:8080/wupdate.ps1</code> and wrote it into the user Temp path.</li><li>Threat actor downloaded <code>wupdate.bat</code> from <code>http://78.141.196.6:8080/wupdate.bat</code> and wrote it into the user Temp path.</li><li>Threat actor added Windows Defender extension exclusions for .bat, .ps1, .exe via Defender exclusion registry paths.</li><li>Threat actor added a Windows Defender path exclusion for <code>C:\Users\KENJI~1.SAT\AppData\Local\Temp</code>.</li><li>Threat actor performed interactive reconnaissance using <code>ipconfig /all</code> and <code>arp -a</code>.</li><li>Threat actor created and concealed a staging directory by applying <code>attrib +h +s</code> to <code>C:\ProgramData\WindowsCache</code>.</li><li>Threat actor abused <code>certutil.exe -urlcache -f</code> to download payloads into the staging directory, writing svchost.exe and mm.exe.</li><li>Threat actor created persistence via scheduled task <strong>"Windows Update Check"</strong> executing <code>C:\ProgramData\WindowsCache\svchost.exe</code> daily at 02:00 as SYSTEM.</li><li>Threat actor established external communications, using :8080 for transfer and :443 for payload communications to 78.141.196.6.</li><li>Threat actor executed credential dumping commands via mm.exe using <code>privilege::debug</code> and <code>sekurlsa::logonpasswords</code>.</li><li>Threat actor staged and exfiltrated <code>C:\ProgramData\WindowsCache\export-data.zip</code> using curl to <code>https://discord.com/api/webhooks/...</code>.</li><li>Threat actor attempted lateral movement by storing credentials for 10.1.0.188 with <code>cmdkey</code> (user fileadmin) and initiating RDP via <code>mstsc.exe /v:10.1.0.188</code>.</li><li>Threat actor cleared the Windows Security event log using <code>wevtutil.exe cl Security</code>.</li></ul></div>
+</div>
+<div class="section" id="when">
+<div class="section-header">
+  <span class="sh-num">04</span>
+  <span class="sh-title">WHEN</span>
+</div>
+<div class="section-body"><p class="p">Timeline (UTC; reconstructed from Defender telemetry using the queries in the KQL Queries section):</p><div class="tl"><div class="tl-row"><span class="tl-t">18:37</span><span class="tl-e">PowerShell downloaded <code>wupdate.ps1</code> from 78.141.196.6:8080</span></div><div class="tl-row"><span class="tl-t">18:46 – 18:49</span><span class="tl-e">Additional script download (<code>wupdate.bat</code>) and Windows Defender exclusions added</span></div><div class="tl-row"><span class="tl-t">19:03 – 19:04</span><span class="tl-e">Interactive reconnaissance: <code>ipconfig /all</code>, <code>arp -a</code></span></div><div class="tl-row"><span class="tl-t">19:05</span><span class="tl-e">Staging directory hidden: <code>attrib +h +s C:\ProgramData\WindowsCache</code></span></div><div class="tl-row"><span class="tl-t">19:06 – 19:07</span><span class="tl-e">Payload downloads via certutil into staging (svchost.exe, mm.exe)</span></div><div class="tl-row"><span class="tl-t">19:07</span><span class="tl-e">Persistence: scheduled task <strong>Windows Update Check</strong> → svchost.exe (SYSTEM, daily 02:00)</span></div><div class="tl-row"><span class="tl-t">19:08</span><span class="tl-e">Credential dumping: <code>mm.exe privilege::debug sekurlsa::logonpasswords exit</code></span></div><div class="tl-row"><span class="tl-t">19:09</span><span class="tl-e">Exfiltration: curl uploaded export-data.zip to Discord webhook</span></div><div class="tl-row"><span class="tl-t">19:10</span><span class="tl-e">Lateral movement attempt: <code>cmdkey</code> + <code>mstsc</code> to 10.1.0.188 (user fileadmin)</span></div><div class="tl-row"><span class="tl-t">19:11</span><span class="tl-e">Anti-forensics: <code>wevtutil cl Security</code></span></div></div><p class="p">Observed dwell time: ~34 minutes (18:37–19:11 UTC).</p></div>
+</div>
+<div class="section" id="where">
+<div class="section-header">
+  <span class="sh-num">05</span>
+  <span class="sh-title">WHERE</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Targets</div><div class="tbl-outer"><table><thead><tr><th>Host / IP</th><th>Role</th></tr></thead><tbody><tr><td>azuki-sl</td><td>Primary compromised IT admin workstation</td></tr><tr><td>10.1.0.188</td><td>Lateral movement attempt target (cmdkey + mstsc)</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Malware / Tool Paths (as observed)</div><ul class="bl"><li><code>C:\ProgramData\WindowsCache</code> (hidden staging directory)</li><li><code>C:\ProgramData\WindowsCache\svchost.exe</code> (staged payload + persisted task target)</li><li><code>C:\ProgramData\WindowsCache\mm.exe</code> (credential dumping tool)</li><li><code>C:\ProgramData\WindowsCache\export-data.zip</code> (exfiltrated archive)</li><li><code>C:\Users\KENJI~1.SAT\AppData\Local\Temp</code> (Defender excluded path)</li><li><code>C:\Users...\Temp\wupdate.ps1</code> (download destination shown in command line)</li><li><code>C:\Users...\Temp\wupdate.bat</code> (download destination shown in command line)</li></ul></div><div class="sub"><div class="sub-label">Network Connections (as observed)</div><ul class="bl"><li>RDP Initial Access: 88.97.178.12 → azuki-sl (RemoteInteractive), account kenji.sato</li><li>Tool Transfer: azuki-sl → 78.141.196.6:8080 (PowerShell + certutil)</li><li>C2/Beaconing: azuki-sl → 78.141.196.6:443 (initiating process svchost.exe)</li><li>Exfiltration: azuki-sl → https://discord.com/api/webhooks/... (curl upload of export-data.zip)</li><li>Lateral Attempt: azuki-sl → 10.1.0.188 (cmdkey credential staging + mstsc)</li></ul></div></div>
+</div>
+<div class="section" id="why">
+<div class="section-header">
+  <span class="sh-num">06</span>
+  <span class="sh-title">WHY</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Root Cause (evidence-based)</div><ul class="bl"><li>Valid credentials were used for interactive remote access (successful RDP RemoteInteractive logon as kenji.sato from an external IP).</li><li>The threat actor executed with sufficient rights to apply Windows Defender exclusions (extensions and path exclusions recorded under Defender exclusion registry locations).</li><li>The workstation allowed living-off-the-land transfer and execution patterns (PowerShell downloads, certutil -urlcache, scheduled task creation, and event log clearing) without prevention in the observed window.</li><li>Anti-forensic activity (Security log clearing) reduced visibility into authentication and privileged actions during the incident.</li></ul></div><div class="sub"><div class="sub-label">Attacker Goal</div><p class="p">Steal sensitive business data (supplier contracts and pricing) and exfiltrate it off-network for competitive advantage.</p></div></div>
+</div>
+<div class="section" id="how">
+<div class="section-header">
+  <span class="sh-num">07</span>
+  <span class="sh-title">HOW</span>
+</div>
+<div class="section-body"><div class="phase"><span class="phase-tag">Initial Access</span><ul class="bl"><li>Successful RDP (RemoteInteractive) access gained to azuki-sl using legitimate account kenji.sato from external IP 88.97.178.12.</li></ul></div><div class="phase"><span class="phase-tag">Tooling Delivery</span><ul class="bl"><li>PowerShell used to retrieve wupdate.ps1 from external server 78.141.196.6 at 18:37 UTC.</li><li>PowerShell used to retrieve wupdate.bat from 78.141.196.6 between 18:46–18:49 UTC.</li></ul></div><div class="phase"><span class="phase-tag">Defense Evasion</span><ul class="bl"><li>Windows Defender exclusions added for executable/script extensions: .ps1, .bat, .exe.</li><li>Windows Defender path exclusion added for <code>C:\Users\KENJI~1.SAT\AppData\Local\Temp</code> to support drop-and-run activity.</li></ul></div><div class="phase"><span class="phase-tag">Discovery</span><ul class="bl"><li>Host and network reconnaissance executed using <code>ipconfig /all</code> at 19:03–19:04 UTC.</li><li>Neighbour/network discovery executed using <code>arp -a</code> at 19:03–19:04 UTC.</li></ul></div><div class="phase"><span class="phase-tag">Staging</span><ul class="bl"><li>Staging directory created at <code>C:\ProgramData\WindowsCache</code> and concealed using <code>attrib +h +s</code> at 19:05 UTC.</li><li>LOLBIN <code>certutil.exe -urlcache -f</code> used to download payloads from 78.141.196.6:8080.</li><li>Staged executables written to disk as <code>C:\ProgramData\WindowsCache\svchost.exe</code>.</li><li>Staged executables written to disk as <code>C:\ProgramData\WindowsCache\mm.exe</code>.</li><li>Masquerading observed: a server-hosted filename (e.g., AdobeGC.exe) saved locally as mm.exe.</li></ul></div><div class="phase"><span class="phase-tag">Persistence</span><ul class="bl"><li>Scheduled task created at 19:07 UTC named "Windows Update Check".</li><li>Task configured to execute <code>C:\ProgramData\WindowsCache\svchost.exe</code> daily at 02:00 as SYSTEM.</li><li>Persistence naming and execution context aligned with stealth: "Windows Update" theme + svchost.exe masquerade + non-standard ProgramData path.</li></ul></div><div class="phase"><span class="phase-tag">Command-and-Control</span><ul class="bl"><li>Outbound activity to 78.141.196.6:8080 associated with payload/script transfer (PowerShell/certutil).</li><li>Outbound activity to 78.141.196.6:443 initiated by staged svchost.exe, consistent with C2-style communications to the same infrastructure.</li></ul></div><div class="phase"><span class="phase-tag">Credential Access</span><ul class="bl"><li>Credential dumping executed at 19:08 UTC via mm.exe using: <code>privilege::debug sekurlsa::logonpasswords exit</code>.</li><li>Activity consistent with LSASS credential harvesting tradecraft (credential material exposure risk).</li></ul></div><div class="phase"><span class="phase-tag">Collection and Exfiltration</span><ul class="bl"><li>Archive staged as export-data.zip within <code>C:\ProgramData\WindowsCache</code>.</li><li>Exfiltration executed at 19:09 UTC using curl to a Discord webhook endpoint: discord.com/api/webhooks/...</li></ul></div><div class="phase"><span class="phase-tag">Lateral Movement Attempt</span><ul class="bl"><li>Credentials staged for internal target 10.1.0.188 using <code>cmdkey</code> with username fileadmin at 19:10 UTC.</li><li>RDP pivot attempt initiated using <code>mstsc.exe /v:10.1.0.188</code> at 19:10 UTC.</li></ul></div><div class="phase"><span class="phase-tag">Anti-Forensics</span><ul class="bl"><li>Windows Security event log cleared at 19:11 UTC using <code>wevtutil.exe cl Security</code> to reduce authentication and privilege-tracking visibility.</li></ul></div></div>
+</div>
+<div class="section" id="impact">
+<div class="section-header">
+  <span class="sh-num">08</span>
+  <span class="sh-title">IMPACT</span>
+</div>
+<div class="section-body"><div class="impact-wrap"><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Data theft occurred: export-data.zip was uploaded off-network via curl to https://discord.com/api/webhooks/....</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Credential exposure occurred: mm.exe executed sekurlsa::logonpasswords, indicating LSASS credential dumping activity.</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Persistence occurred: scheduled task "Windows Update Check" running <code>C:\ProgramData\WindowsCache\svchost.exe</code> as SYSTEM (daily at 02:00) and a documented backdoor local account name support.</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Security control degradation occurred: Windows Defender exclusions were added for .ps1, .bat, .exe and <code>C:\Users\KENJI~1.SAT\AppData\Local\Temp</code>.</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Forensic visibility was degraded: Windows Security log was cleared.</span></div></div><div class="risk high"><span class="risk-lbl">Risk: HIGH</span><span>The combination of confirmed exfiltration, credential dumping, persistence, and log clearing creates material risk of follow-on access, reuse of exposed credentials, and broader compromise beyond the initially observed workstation and the attempted lateral target.</span></div></div>
+</div>
+<div class="section" id="intel">
+<div class="section-header">
+  <span class="sh-num">09</span>
+  <span class="sh-title">THREAT INTELLIGENCE</span>
+</div>
+<div class="section-body"><p class="p"><strong>88.97.178.12 (Initial Access Source)</strong> — OSINT enrichment identified this IP as located in London, England, United Kingdom, associated with AS51809 (BRSK Limited) and characterised as DSL access. The residential nature of the source is consistent with interactive access paths such as stolen credentials used directly from consumer connectivity, rather than a dedicated cloud/VPS host typically seen for malware staging.</p><p class="p"><strong>78.141.196.6 (Staging + C2 Server)</strong> — OSINT enrichment identified this IP as located in London, England, United Kingdom, with hostname 78.141.196.6.vultrusercontent.com, and associated with AS20473 (The Constant Company, LLC / Vultr Holdings LLC). The hosting classification supports its role as attacker-controlled infrastructure used for both payload delivery and C2. Telemetry showed clear role separation by port and initiating process: :8080 correlated directly with download utilities (powershell.exe, certutil.exe); :443 correlated with the staged payload (svchost.exe) communicating outbound, consistent with C2/beacon behaviour designed to blend into common HTTPS traffic.</p><div class="sub"><div class="sub-label">Tools and Tradecraft Observed (host-based)</div><ul class="bl"><li>PowerShell (Invoke-WebRequest) for initial script transfer (wupdate.ps1, wupdate.bat) from an external server.</li><li>certutil.exe -urlcache -f for LOLBIN payload transfer into a hidden ProgramData staging directory.</li><li>schtasks.exe for persistence via a disguised scheduled task (Windows Update Check) running a staged payload as SYSTEM.</li><li>mm.exe executing privilege::debug and sekurlsa::logonpasswords, consistent with credential dumping activity.</li><li>curl.exe for outbound file upload/exfiltration of export-data.zip to a Discord webhook endpoint.</li><li>cmdkey.exe + mstsc.exe for credential staging and lateral movement attempt to 10.1.0.188 using fileadmin.</li><li>wevtutil.exe cl Security for anti-forensics (Security log clearing).</li></ul></div><div class="sub"><div class="sub-label">Malware / Payload Observations (based on paths + behaviour)</div><ul class="bl"><li>svchost.exe executing from <code>C:\ProgramData\WindowsCache</code> is inconsistent with legitimate Windows process placement and was used as the scheduled task payload and the process initiating :443 communications to the external infrastructure.</li><li>mm.exe served as the credential dumping tool, including evidence of masquerading at download time (server-hosted filename AdobeGC.exe saved to disk as mm.exe).</li><li>wupdate.ps1 / wupdate.bat functioned as staging enablers, preceding Defender exclusions, tool transfer, and persistence.</li></ul></div></div>
+</div>
+<div class="section" id="recs">
+<div class="section-header">
+  <span class="sh-num">10</span>
+  <span class="sh-title">RECOMMENDATIONS</span>
+</div>
+<div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate azuki-sl from the network to prevent continued C2, exfiltration, or lateral movement attempts.</li><li>Disable/reset kenji.sato credentials immediately and treat all credentials used on azuki-sl as exposed due to confirmed LSASS dumping activity.</li><li>Remove persistence on azuki-sl: delete scheduled task "Windows Update Check"; remove/disable the backdoor local account support (and validate no other local admin accounts were created).</li><li>Contain attacker infrastructure: block 78.141.196.6 at perimeter controls and hunt enterprise-wide for any communication attempts to this IP over :8080 and :443.</li><li>Preserve volatile and on-disk artefacts before cleanup: collect the full contents of <code>C:\ProgramData\WindowsCache</code> and export relevant Sentinel/MDE logs for chain-of-custody where applicable.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Scope lateral movement risk: prioritise investigation of 10.1.0.188 for logons, new processes, scheduled tasks, Defender setting changes, and any evidence of credential reuse from azuki-sl.</li><li>Hunt for the same tradecraft across endpoints, specifically: Defender exclusion registry changes (Extensions and Paths); certutil -urlcache -f http usage; scheduled tasks executing binaries from ProgramData staging paths; wevtutil cl Security or other event log clearing behaviour.</li><li>Review network egress and proxy telemetry for Discord webhook patterns and identify whether similar webhook uploads occurred from other hosts.</li><li>Validate Defender posture on impacted systems: remove malicious exclusions and confirm protections are restored for scripts/executables and Temp paths.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Reduce RDP exposure and credential replay risk: restrict RemoteInteractive access paths to only approved sources and enforce stronger authentication controls for remote access.</li><li>Harden endpoint controls against LOLBIN transfer and disguised persistence: establish detections/blocks for suspicious certutil download patterns, scheduled tasks running from non-standard directories, and svchost-named binaries executing outside System32.</li><li>Implement durable monitoring for credential dumping: alert on command-line indicators like sekurlsa::logonpasswords and suspicious debug privilege enabling where feasible.</li><li>Improve anti-forensics visibility: implement monitoring and alerting for event log clearing and correlate with remote logons, task creation, and outbound connections.</li><li>Data protection governance: review and strengthen controls around storage/handling of supplier contracts and pricing artefacts to reduce blast radius if a single workstation is compromised.</li></ul></div></div>
+</div>
+<div class="section" id="lessons">
+<div class="section-header">
+  <span class="sh-num">11</span>
+  <span class="sh-title">LESSONS LEARNED</span>
+</div>
+<div class="section-body"><ul class="bl"><li>A "quiet" business anomaly can be the first meaningful indicator of a targeted intrusion and data theft.</li><li>Defender exclusions for scripts/executables and Temp directories directly enable rapid tool execution and should be treated as high-signal events.</li><li>A hidden ProgramData staging directory combined with masqueraded filenames ("svchost.exe", "mm.exe") is strong evidence of deliberate tradecraft rather than accidental software behaviour.</li><li>Credential dumping marks a pivot point from single-host compromise to assumed credential exposure across the environment.</li><li>Clearing the Security event log is a decisive anti-forensic action that should immediately elevate incident priority and scoping urgency.</li><li>Separating "tool transfer" traffic from "beacon/C2" traffic by port and initiating process prevents misclassification of attacker infrastructure roles.</li></ul></div>
+</div>
+<div class="section" id="kql">
+<div class="section-header">
+  <span class="sh-num">12</span>
+  <span class="sh-title">KQL QUERIES</span>
+</div>
+<div class="section-body"><div class="kql">
+<div class="kql-hd"><b>Q01</b> — Successful RemoteInteractive logons (Initial Access Source IP + Account)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ActionType == "LogonSuccess"
+| summarize count() by RemoteIP, AccountName</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q02</b> — Pivot on the attacker source IP (session validation)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where RemoteIP == "88.97.178.12"
+| project TimeGenerated, DeviceName, AccountName, LogonType, ActionType, RemoteIP, IsLocalAdmin, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q03</b> — Recon commands executed (ipconfig / arp)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("ipconfig", "arp -a")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q04</b> — Staging directory hiding (attrib +h +s)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has "attrib"
+| project TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q05</b> — Defender extension exclusions (count + values)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceRegistryEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where RegistryKey has @"Windows Defender\Exclusions\Extensions"
+| where ActionType == "RegistryValueSet"
+| summarize Extensions=make_set(RegistryValueName), Count=dcount(RegistryValueName)</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q06</b> — Defender path exclusions (exact excluded path)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceRegistryEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where RegistryKey has @"Windows Defender\Exclusions\Paths"
+| where ActionType == "RegistryValueSet"
+| project TimeGenerated, RegistryValueName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q07</b> — HTTP-related process command lines (PowerShell + certutil)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has "http"
+| project TimeGenerated, FileName, ProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q08</b> — Scheduled task creation (persistence)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("schtasks", "/create")
+| project TimeGenerated, ProcessCommandLine</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q09</b> — Local user creation / backdoor account</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("/add", "net user", "local group")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q10</b> — Connections to external server (staging vs C2 port separation)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where RemoteIP == "78.141.196.6"
+| project TimeGenerated, InitiatingProcessFileName, RemoteIP, RemotePort
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q11</b> — Credential dumping indicators (mimikatz / sekurlsa)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("sekurlsa::logonpasswords", "privilege::debug", "mimikatz")
+| project TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q12</b> — Staging directory file activity (create/rename evidence)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where FolderPath startswith @"C:\ProgramData\WindowsCache\"
+| where ActionType in ("FileCreated","FileRenamed")
+| project TimeGenerated, ActionType, FolderPath, FileName, PreviousFileName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q13</b> — Exfiltration + RDP tooling (curl / cmdkey / mstsc)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("mstsc", "cmdkey")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, DeviceName</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q14</b> — Security log clearing (anti-forensics)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-20))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine has_any ("wevtutil", "cl")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, DeviceName
+| order by TimeGenerated asc</pre>
+</div></div></div>
+</div>
+<div class="foot">
+  <span class="foot-conf">CONFIDENTIAL</span>
+  <span>Azuki Import/Export — Targeted Intrusion &nbsp;·&nbsp; Yousef Nabil &nbsp;·&nbsp; February 17, 2026</span>
+</div>
+</main>
+</div>
+
+
+<script>
+(function(){
+  const links = document.querySelectorAll('.nav-link');
+  const ids = Array.from(links).map(l=>l.getAttribute('href').slice(1));
+  const els = ids.map(id=>document.getElementById(id)).filter(Boolean);
+  function tick(){
+    const y = window.scrollY + 80;
+    let cur = els[0];
+    for(const e of els){ if(e && e.offsetTop<=y) cur=e; }
+    links.forEach(l=>l.classList.toggle('active', cur && l.getAttribute('href')==='#'+cur.id));
+  }
+  window.addEventListener('scroll', tick, {passive:true});
+  tick();
+})();
+</script>
+
+</body>
+</html>

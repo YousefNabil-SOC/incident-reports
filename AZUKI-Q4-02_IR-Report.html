@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AZUKI-2025-Q4-02 — Yousef Nabil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:        #080a0d;
+  --bg2:       #0c0f14;
+  --surface:   #101520;
+  --surface2:  #141a24;
+  --border:    rgba(255,200,80,0.07);
+  --border2:   rgba(255,200,80,0.14);
+  --border3:   rgba(255,200,80,0.25);
+  --amber:     #f0a500;
+  --amber-dim: rgba(240,165,0,0.10);
+  --amber-glow:rgba(240,165,0,0.04);
+  --red:       #e84040;
+  --red-dim:   rgba(232,64,64,0.12);
+  --green:     #2ecc71;
+  --green-dim: rgba(46,204,113,0.10);
+  --blue:      #4a9eff;
+  --text:      #d4d8e0;
+  --text2:     #7a8090;
+  --text3:     #3a4050;
+  --mono:      'JetBrains Mono', monospace;
+  --cond:      'Barlow Condensed', sans-serif;
+  --sans:      'Barlow', sans-serif;
+  --nav-w:     220px;
+  --top-h:     48px;
+  --radius:    4px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-size:14px; scroll-behavior:smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* dot grid background */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: radial-gradient(circle, rgba(255,200,80,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  height:var(--top-h);
+  background: rgba(8,10,13,0.96);
+  border-bottom:1px solid var(--border2);
+  backdrop-filter: blur(10px);
+  display:flex; align-items:center;
+  padding:0 24px; gap:16px;
+}
+.tb-analyst {
+  display:flex; flex-direction:column; gap:1px;
+  border-right:1px solid var(--border2);
+  padding-right:16px;
+}
+.tb-name {
+  font-family:var(--cond); font-size:15px; font-weight:700;
+  color:var(--text); letter-spacing:.3px;
+}
+.tb-role {
+  font-family:var(--mono); font-size:8.5px; font-weight:400;
+  letter-spacing:1.8px; text-transform:uppercase; color:var(--text3);
+}
+.tb-mid { flex:1; display:flex; align-items:center; gap:20px; }
+.tb-id {
+  font-family:var(--mono); font-size:11px; color:var(--text3);
+  letter-spacing:.5px;
+}
+.tb-title {
+  font-family:var(--cond); font-size:13px; font-weight:500;
+  color:var(--text2); letter-spacing:.3px;
+  flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.sev {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  padding:3px 10px; border-radius:2px;
+}
+.sev-critical { background:var(--red); color:#fff; }
+.sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
+
+/* ── LAYOUT ── */
+.layout { display:flex; padding-top:var(--top-h); position:relative; z-index:1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--nav-w); flex-shrink:0;
+  position:fixed; top:var(--top-h); bottom:0; left:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border2);
+  overflow-y:auto; padding:20px 0 40px;
+  scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+}
+.nav-section-label {
+  font-family:var(--mono); font-size:8px; font-weight:500;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--text3); padding:0 18px 8px;
+}
+.nav-link {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 18px; text-decoration:none;
+  color:var(--text3); font-size:12px; font-weight:400;
+  font-family:var(--sans);
+  border-left:2px solid transparent;
+  transition:all .12s ease;
+  cursor:pointer;
+}
+.nav-link:hover { color:var(--text2); background:var(--amber-glow); }
+.nav-link.active {
+  color:var(--amber); border-left-color:var(--amber);
+  background:var(--amber-dim); font-weight:500;
+}
+.nav-idx {
+  font-family:var(--mono); font-size:9px; color:var(--text3);
+  min-width:16px;
+}
+.nav-link.active .nav-idx { color:var(--amber); opacity:.6; }
+
+/* ── MAIN ── */
+.main {
+  margin-left:var(--nav-w);
+  flex:1; min-width:0;
+  padding:36px 48px 80px 44px;
+  max-width:880px;
+}
+
+/* ── COVER ── */
+.cover {
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--amber);
+  border-radius:var(--radius);
+  padding:36px 40px;
+  margin-bottom:28px;
+  position:relative; overflow:hidden;
+}
+.cover::after {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:200px; height:200px;
+  background: radial-gradient(circle at top right, rgba(240,165,0,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-eyebrow {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--amber); opacity:.7; margin-bottom:10px;
+}
+.cover-title {
+  font-family:var(--cond); font-size:28px; font-weight:700;
+  color:var(--text); line-height:1.15; margin-bottom:4px;
+  letter-spacing:.3px;
+}
+.cover-sub {
+  font-size:12.5px; color:var(--text2); margin-bottom:26px;
+  letter-spacing:.3px;
+}
+.meta-row {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap:6px;
+}
+.meta-item {
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:8px 11px;
+}
+.meta-key {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:3px;
+}
+.meta-val {
+  font-size:12.5px; font-weight:500; color:var(--text);
+}
+.meta-val.crit { color:#fca5a5; }
+.meta-val.high { color:var(--amber); }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom:2px;
+  scroll-margin-top:calc(var(--top-h) + 16px);
+}
+.section-header {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 0 10px;
+  border-bottom:1px solid var(--border2);
+  margin-bottom:16px;
+}
+.sh-num {
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  color:var(--amber); opacity:.5; min-width:24px;
+}
+.sh-title {
+  font-family:var(--cond); font-size:13px; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
+}
+.section-body { padding-bottom:24px; }
+
+/* ── SUBSECTION ── */
+.sub { margin:14px 0 10px; }
+.sub-label {
+  font-family:var(--mono); font-size:9px; font-weight:500;
+  letter-spacing:1.8px; text-transform:uppercase;
+  color:var(--amber); opacity:.65;
+  padding-bottom:6px; margin-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ── PROSE ── */
+.p {
+  font-size:13px; line-height:1.75; color:var(--text2);
+  margin-bottom:10px;
+}
+.p strong { color:var(--text); font-weight:600; }
+.p + .p { margin-top:-4px; }
+
+/* ── TABLE ── */
+.tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:rgba(240,165,0,0.06); }
+thead th {
+  font-family:var(--mono); font-size:8.5px; font-weight:500;
+  letter-spacing:1.2px; text-transform:uppercase;
+  color:var(--amber); opacity:.8;
+  padding:9px 13px; text-align:left;
+  border-bottom:1px solid var(--border2);
+  white-space:nowrap;
+}
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover td { background:var(--amber-glow); }
+td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; }
+
+/* ── LIST ── */
+.bl {
+  list-style:none;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden; margin:6px 0;
+}
+.bl li {
+  display:flex; align-items:flex-start; gap:9px;
+  padding:8px 14px 8px 12px;
+  font-size:12.5px; color:var(--text2);
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  line-height:1.55;
+  transition:all .1s ease;
+}
+.bl li:last-child { border-bottom:none; }
+.bl li::before { content:'›'; color:var(--amber); opacity:.5; font-size:15px; line-height:1.3; flex-shrink:0; margin-top:-1px; }
+.bl li:hover { background:var(--amber-glow); border-left-color:rgba(240,165,0,.2); }
+.bl strong { color:var(--text); font-weight:600; }
+
+/* ── TIMELINE ── */
+.tl { padding-left:20px; position:relative; margin:8px 0; }
+.tl::before {
+  content:''; position:absolute; left:5px; top:6px; bottom:6px;
+  width:1px;
+  background:linear-gradient(to bottom, var(--amber), transparent);
+  opacity:.3;
+}
+.tl-row {
+  display:flex; gap:16px;
+  padding:7px 0;
+  position:relative;
+}
+.tl-row::before {
+  content:''; position:absolute; left:-17px; top:13px;
+  width:7px; height:7px; border-radius:50%;
+  background:var(--bg2); border:1.5px solid var(--amber);
+  opacity:.6;
+}
+.tl-t {
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  color:var(--amber); opacity:.8;
+  min-width:136px; flex-shrink:0; padding-top:1px;
+}
+.tl-e {
+  font-size:12.5px; color:var(--text2); flex:1; line-height:1.5;
+}
+.tl-e strong { color:var(--text); }
+
+/* ── PHASE ── */
+.phase { margin:10px 0; }
+.phase-tag {
+  display:inline-flex; align-items:center;
+  font-family:var(--mono); font-size:9px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  color:var(--text2); background:var(--surface2);
+  border:1px solid var(--border2); border-radius:2px;
+  padding:3px 9px; margin-bottom:6px;
+}
+
+/* ── KQL ── */
+.kql { margin:12px 0; }
+.kql-hd {
+  font-size:11px; color:var(--text2);
+  margin-bottom:5px; padding-left:1px;
+}
+.kql-hd b {
+  font-family:var(--mono); font-size:10.5px;
+  color:var(--amber); font-weight:600; opacity:.9;
+}
+.kql-wrap {
+  background:#05080d;
+  border:1px solid rgba(240,165,0,0.15);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.kql-bar {
+  background:rgba(240,165,0,0.05);
+  border-bottom:1px solid rgba(240,165,0,0.1);
+  padding:5px 13px;
+  display:flex; align-items:center; gap:8px;
+}
+.kql-dots { display:flex; gap:4px; }
+.kql-dots i { width:7px; height:7px; border-radius:50%; background:var(--border2); }
+.kql-tag {
+  font-family:var(--mono); font-size:8px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--amber); opacity:.5;
+}
+.kql-wrap pre {
+  font-family:var(--mono); font-size:11.5px;
+  color:#b3c3e0; line-height:1.7;
+  padding:12px 14px;
+  overflow-x:auto; tab-size:2;
+}
+.kql-wrap pre .pipe { color:var(--text3); }
+.kql-wrap pre .kw   { color:#c084fc; }
+.kql-wrap pre .fn   { color:#60a5fa; }
+.kql-wrap pre .str  { color:#86efac; }
+
+/* ── IMPACT ── */
+.impact-row {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:9px 13px;
+  border-bottom:1px solid var(--border);
+  border-left:2px solid transparent;
+  font-size:12.5px; color:var(--text2); line-height:1.5;
+}
+.impact-row:first-child { border-radius:var(--radius) var(--radius) 0 0; }
+.impact-row:last-child  { border-bottom:none; border-radius:0 0 var(--radius) var(--radius); }
+.impact-row.conf { border-left-color:var(--red); }
+.impact-wrap { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:6px 0; background:var(--surface); }
+.ibadge {
+  font-family:var(--mono); font-size:8px; font-weight:700;
+  letter-spacing:1.2px; text-transform:uppercase;
+  padding:2px 6px; border-radius:2px; white-space:nowrap;
+  margin-top:2px; flex-shrink:0;
+}
+.ibadge.conf { background:var(--red-dim); color:var(--red); }
+.ibadge.risk { background:var(--amber-dim); color:var(--amber); }
+.impact-row strong { color:var(--text); }
+
+/* ── RISK BANNER ── */
+.risk {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:11px 14px;
+  border-radius:var(--radius);
+  border:1px solid; margin:10px 0;
+  font-size:12.5px; line-height:1.55;
+}
+.risk.critical { background:var(--red-dim); border-color:rgba(232,64,64,.25); color:var(--text2); }
+.risk.high     { background:var(--amber-dim); border-color:rgba(240,165,0,.25); color:var(--text2); }
+.risk-lbl {
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  white-space:nowrap; margin-top:2px; flex-shrink:0;
+}
+.risk.critical .risk-lbl { color:var(--red); }
+.risk.high .risk-lbl     { color:var(--amber); }
+.risk strong { color:var(--text); }
+
+/* ── RECS ── */
+.rec-grp { margin:10px 0; }
+.rec-badge {
+  display:inline-flex; font-family:var(--mono); font-size:8.5px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:2px; margin-bottom:6px;
+}
+.rb-now   { background:var(--red-dim); color:var(--red); }
+.rb-short { background:var(--amber-dim); color:var(--amber); }
+.rb-long  { background:var(--green-dim); color:var(--green); }
+
+/* ── FOOTER ── */
+.foot {
+  margin-top:24px; padding-top:18px;
+  border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:9.5px; color:var(--text3);
+}
+.foot-conf { color:var(--red); opacity:.5; font-weight:700; letter-spacing:2px; }
+
+code {
+  font-family:var(--mono); font-size:11px;
+  color:#93c5fd; background:rgba(74,158,255,0.1);
+  padding:1px 5px; border-radius:2px;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+.bl li { flex-wrap: wrap; }
+
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="tb-analyst">
+    <span class="tb-name">Yousef Nabil</span>
+    <span class="tb-role">Incident Response Analyst</span>
+  </div>
+  <div class="tb-mid">
+    <span class="tb-id">AZUKI-2025-Q4-02</span>
+    <span class="tb-title">Azuki — Follow-On Intrusion</span>
+    <span class="sev sev-critical">CRITICAL</span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="nav-section-label">Navigation</div>
+<a class="nav-link" href="#summary"><span class="nav-idx">01</span>Executive Summary</a>
+<a class="nav-link" href="#who"><span class="nav-idx">02</span>WHO</a>
+<a class="nav-link" href="#what"><span class="nav-idx">03</span>WHAT</a>
+<a class="nav-link" href="#when"><span class="nav-idx">04</span>WHEN</a>
+<a class="nav-link" href="#where"><span class="nav-idx">05</span>WHERE</a>
+<a class="nav-link" href="#why"><span class="nav-idx">06</span>WHY</a>
+<a class="nav-link" href="#how"><span class="nav-idx">07</span>HOW</a>
+<a class="nav-link" href="#impact"><span class="nav-idx">08</span>Impact</a>
+<a class="nav-link" href="#intel"><span class="nav-idx">09</span>Threat Intel</a>
+<a class="nav-link" href="#recs"><span class="nav-idx">10</span>Recommendations</a>
+<a class="nav-link" href="#lessons"><span class="nav-idx">11</span>Lessons Learned</a>
+<a class="nav-link" href="#kql"><span class="nav-idx">12</span>KQL Queries</a>
+</aside>
+
+<main class="main">
+<div class="cover">
+  <div class="cover-eyebrow">Incident Response Report</div>
+  <div class="cover-title">Azuki Import/Export<br><span style="font-weight:300;font-size:.65em;color:var(--text2)">Follow-On Intrusion — AZUKI-FILESERVER01</span></div>
+  <div class="cover-sub">AZUKI-2025-Q4-02 &nbsp;·&nbsp; Post-Compromise Activity &nbsp;·&nbsp; 2025-11-22</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-key">Incident ID</div><div class="meta-val">AZUKI-2025-Q4-02</div></div>
+    <div class="meta-item"><div class="meta-key">Predecessor</div><div class="meta-val">AZUKI-2025-Q4-01</div></div>
+    <div class="meta-item"><div class="meta-key">Date of Report</div><div class="meta-val">February 18, 2026</div></div>
+    <div class="meta-item"><div class="meta-key">Severity</div><div class="meta-val crit">CRITICAL</div></div>
+    <div class="meta-item"><div class="meta-key">Report Status</div><div class="meta-val">Complete</div></div>
+    <div class="meta-item"><div class="meta-key">Escalated To</div><div class="meta-val">Incident Response Lead</div></div>
+    <div class="meta-item"><div class="meta-key">Analyst</div><div class="meta-val">Yousef Nabil</div></div>
+  </div>
+</div>
+
+<div class="section" id="summary">
+<div class="section-header">
+  <span class="sh-num">01</span>
+  <span class="sh-title">Executive Summary</span>
+</div>
+<div class="section-body"><p class="p">This report documents a follow-on intrusion in the Azuki Import/Export environment that occurred after an initial access event captured in AZUKI-2025-Q4-01. Evidence confirms the threat actor returned approximately 72 hours after initial access, rotated external infrastructure, and executed a focused data collection and credential access operation primarily on AZUKI-FILESERVER01. All timestamps are reported in UTC unless otherwise stated.</p><p class="p">During the follow-on activity, the actor conducted share and system discovery, staged sensitive data to a hidden directory (<code>C:\Windows\Logs\CBS</code>), compressed multiple datasets for transfer, and exfiltrated archives and a credential theft artefact (lsass.dmp) to an external web service. Persistence was established via a registry Run key configured to execute a hidden PowerShell script at startup, and anti-forensic activity was observed through deletion of PowerShell command history.</p><p class="p">Confirmed impact includes unauthorised access to internal file shares, creation of a credential export file within the staging directory, confirmed external upload of multiple archives, and attempted credential theft via LSASS memory dumping. Given the presence of persistence, credential access activity, and confirmed exfiltration, this incident is assessed as <strong>CRITICAL</strong> and requires immediate containment and credential remediation actions.</p></div>
+</div>
+<div class="section" id="who">
+<div class="section-header">
+  <span class="sh-num">02</span>
+  <span class="sh-title">WHO</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">External IPs</div><div class="tbl-outer"><table><thead><tr><th>IP Address</th><th>Role</th><th>Location</th><th>ASN / Org</th><th>Notes</th></tr></thead><tbody><tr><td>159.26.106.98</td><td>Return access source (RDP)</td><td>London, United Kingdom</td><td>AS208172 — Proton AG</td><td>VPN/hosting egress — operator OPSEC; rotated from 88.97.178.12</td></tr><tr><td>78.141.196.6</td><td>Staging + C2 server (retained)</td><td>London, United Kingdom</td><td>AS20473 — Vultr Holdings LLC</td><td>Previously observed; :8080/:7331 payload, :8880 C2 tasking/beaconing</td></tr><tr><td>file.io</td><td>Exfiltration destination</td><td>External (public service)</td><td>—</td><td>Public file transfer service abused for multipart/form-data uploads</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Attacker Infrastructure</div><div class="tbl-outer"><table><thead><tr><th>Indicator</th><th>Role</th><th>Notes</th></tr></thead><tbody><tr><td>78.141.196.6:7331/8080</td><td>Payload/script delivery</td><td>certutil download of ex.ps1</td></tr><tr><td>78.141.196.6:8880</td><td>C2 tasking/beaconing</td><td>curl.exe against /api/tasks and /api/beacon endpoints</td></tr><tr><td>https://file.io</td><td>Exfiltration endpoint</td><td>curl.exe multipart uploads of archives and lsass.dmp</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Accounts Used</div><div class="tbl-outer"><table><thead><tr><th>Account</th><th>Type</th><th>Usage Observed</th></tr></thead><tbody><tr><td>kenji.sato</td><td>Compromised user</td><td>Return access to AZUKI-SL from 159.26.106.98</td></tr><tr><td>fileadmin</td><td>Compromised admin</td><td>Interactive execution on AZUKI-FILESERVER01 (discovery, staging, exfiltration)</td></tr></tbody></table></div></div></div>
+</div>
+<div class="section" id="what">
+<div class="section-header">
+  <span class="sh-num">03</span>
+  <span class="sh-title">WHAT</span>
+</div>
+<div class="section-body"><ul class="bl"><li>Threat actor returned using rotated external infrastructure and resumed interactive operations after a dwell period.</li><li>Threat actor enumerated SMB shares using net.exe / net1.exe and validated access to remote shares via UNC (T1135).</li><li>Threat actor performed host and network discovery (<code>ipconfig.exe /all</code>; <code>ARP.EXE -a</code>) under the fileadmin context.</li><li>Threat actor staged data under <code>C:\Windows\Logs\CBS</code> and applied Hidden/System attributes using <code>attrib.exe +h +s</code> (T1564.001).</li><li>Threat actor downloaded a PowerShell script via <code>certutil.exe -urlcache -f</code> from 78.141.196.6 (T1105).</li><li>Threat actor recursively copied content from internal shares into the staging directory using <code>xcopy.exe /E /I /H /Y</code> (T1119, T1074.001).</li><li>Threat actor created a credential export file in the staging directory: <code>C:\Windows\Logs\CBS\it-admin\IT-Admin-Passwords.csv</code> (T1552, T1555).</li><li>Threat actor compressed staged content into .zip and .tar.gz archives in preparation for transfer.</li><li>Threat actor executed a renamed credential dumping utility (pd.exe) to create an LSASS memory dump (lsass.dmp) (T1036.003, T1003).</li><li>Threat actor established persistence by adding a Run key value name designed to appear legitimate: <strong>FileShareSync</strong> (T1547.001).</li><li>Threat actor exfiltrated staged archives and lsass.dmp to an external web service using <code>curl.exe</code> multipart uploads (<code>-F file=@...</code>) (T1567).</li><li>Threat actor deleted PowerShell PSReadLine history (ConsoleHost_history.txt) to reduce forensic traceability (T1070.003).</li></ul></div>
+</div>
+<div class="section" id="when">
+<div class="section-header">
+  <span class="sh-num">04</span>
+  <span class="sh-title">WHEN</span>
+</div>
+<div class="section-body"><p class="p">Timeline (UTC):</p><div class="tl"><div class="tl-row"><span class="tl-t">2025-11-22 00:27:58</span><span class="tl-e">Follow-on access observed; external return IP identified as 159.26.106.98.</span></div><div class="tl-row"><span class="tl-t">00:42:23 – 00:42:37</span><span class="tl-e">Discovery commands executed on AZUKI-FILESERVER01 (<code>ipconfig.exe /all</code>; <code>ARP.EXE -a</code>).</span></div><div class="tl-row"><span class="tl-t">00:43:05 – 00:43:07</span><span class="tl-e">Share enumeration executed (<code>net.exe share</code>; <code>net1.exe share</code>).</span></div><div class="tl-row"><span class="tl-t">00:43:23</span><span class="tl-e">Remote share enumeration executed (<code>net.exe view \\10.1.0.188</code>).</span></div><div class="tl-row"><span class="tl-t">00:56:47</span><span class="tl-e">Tool transfer: certutil.exe downloads ex.ps1 to <code>C:\Windows\Logs\CBS\ex.ps1</code> from 78.141.196.6.</span></div><div class="tl-row"><span class="tl-t">01:07:53</span><span class="tl-e">Credential file staged: IT-Admin-Passwords.csv created in <code>C:\Windows\Logs\CBS\it-admin</code>.</span></div><div class="tl-row"><span class="tl-t">01:19:24</span><span class="tl-e">Bulk staging: xcopy.exe replicates <code>C:\FileShares\IT-Admin</code> to <code>C:\Windows\Logs\CBS\it-admin</code>.</span></div><div class="tl-row"><span class="tl-t">01:20:46</span><span class="tl-e">Bulk staging: xcopy.exe replicates <code>C:\FileShares\Shipping</code> to <code>C:\Windows\Logs\CBS\shipping</code>.</span></div><div class="tl-row"><span class="tl-t">01:21:38 – 01:30:10</span><span class="tl-e">Compression: archives created (contracts.zip, financial.zip, it-admin.zip, credentials.zip, financial.tar.gz, credentials.tar.gz).</span></div><div class="tl-row"><span class="tl-t">01:59:54 – 02:00:20</span><span class="tl-e">Exfiltration: curl.exe uploads staged archives to https://file.io.</span></div><div class="tl-row"><span class="tl-t">02:10:50</span><span class="tl-e">Persistence: Run key value <strong>FileShareSync</strong> added to HKLM\...\CurrentVersion\Run.</span></div><div class="tl-row"><span class="tl-t">02:24:47</span><span class="tl-e">Credential access: pd.exe creates LSASS memory dump at <code>C:\Windows\Logs\CBS\lsass.dmp</code>.</span></div><div class="tl-row"><span class="tl-t">02:25:37</span><span class="tl-e">Exfiltration: curl.exe uploads lsass.dmp to https://file.io.</span></div><div class="tl-row"><span class="tl-t">02:26:01</span><span class="tl-e">Anti-forensics: ConsoleHost_history.txt deleted from PSReadLine directory.</span></div></div></div>
+</div>
+<div class="section" id="where">
+<div class="section-header">
+  <span class="sh-num">05</span>
+  <span class="sh-title">WHERE</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Targets</div><div class="tbl-outer"><table><thead><tr><th>Host</th><th>Role</th></tr></thead><tbody><tr><td>AZUKI-SL</td><td>Beachhead workstation — return operator access (kenji.sato from 159.26.106.98)</td></tr><tr><td>AZUKI-FILESERVER01</td><td>Primary activity host — discovery, staging, exfiltration, credential dumping, persistence</td></tr><tr><td>10.1.0.188</td><td>Internal SMB target — enumerated via net view</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Malware / Tool Paths</div><ul class="bl"><li><code>C:\Windows\Logs\CBS\</code> (hidden staging directory)</li><li><code>C:\Windows\Logs\CBS\ex.ps1</code></li><li><code>C:\Windows\Logs\CBS\it-admin\IT-Admin-Passwords.csv</code></li><li><code>C:\Windows\Logs\CBS\contracts.zip</code></li><li><code>C:\Windows\Logs\CBS\financial.zip</code></li><li><code>C:\Windows\Logs\CBS\credentials.zip</code></li><li><code>C:\Windows\Logs\CBS\financial.tar.gz</code></li><li><code>C:\Windows\Logs\CBS\credentials.tar.gz</code></li><li><code>C:\Windows\Logs\CBS\pd.exe</code></li><li><code>C:\Windows\Logs\CBS\lsass.dmp</code></li><li><code>C:\Windows\System32\svchost.ps1</code></li><li><code>C:\Users\fileadmin\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code> (deleted)</li></ul></div><div class="sub"><div class="sub-label">Network Connections</div><div class="tbl-outer"><table><thead><tr><th>Source → Destination</th><th>Protocol / Port</th><th>Purpose</th></tr></thead><tbody><tr><td>AZUKI-SL ⇄ 159.26.106.98</td><td>RDP</td><td>Follow-on operator access</td></tr><tr><td>AZUKI-FILESERVER01 → 78.141.196.6</td><td>HTTP (7331/8080)</td><td>Payload/script retrieval (certutil)</td></tr><tr><td>AZUKI-FILESERVER01 → 78.141.196.6</td><td>HTTP (8880)</td><td>C2 tasking and beaconing (curl)</td></tr><tr><td>AZUKI-FILESERVER01 → file.io</td><td>HTTPS (443)</td><td>Exfiltration of staged archives and lsass.dmp (curl -F)</td></tr><tr><td>AZUKI-FILESERVER01 → 10.1.0.188</td><td>SMB (445)</td><td>Remote share enumeration/access (net view)</td></tr></tbody></table></div></div></div>
+</div>
+<div class="section" id="why">
+<div class="section-header">
+  <span class="sh-num">06</span>
+  <span class="sh-title">WHY</span>
+</div>
+<div class="section-body"><div class="sub"><div class="sub-label">Root Cause</div><ul class="bl"><li>Compromised credentials enabling interactive access and execution as legitimate users/administrators.</li><li>Insufficient privileged access protections allowing administrative account reuse across systems.</li><li>Lack of preventive controls for high-risk LOLBins (certutil, xcopy, tar, reg, curl) allowed data staging and exfiltration using trusted binaries.</li><li>File share controls permitted bulk copy/compression operations without blocking or immediate alerting.</li></ul></div><div class="sub"><div class="sub-label">Attacker Goal</div><p class="p">Observed tradecraft and outcomes confirm the threat actor's goal was large-scale data theft and credential harvesting to enable continued access and lateral movement.</p></div></div>
+</div>
+<div class="section" id="how">
+<div class="section-header">
+  <span class="sh-num">07</span>
+  <span class="sh-title">HOW</span>
+</div>
+<div class="section-body"><div class="phase"><span class="phase-tag">Return Access + Discovery</span><ul class="bl"><li>After a short dwell period, the operator returned from a new external IP (159.26.106.98) and resumed hands-on-keyboard activity. On AZUKI-FILESERVER01, the actor executed network and share discovery (ipconfig, ARP, net share, net view) to validate accessible resources and identify high-value share content for collection.</li></ul></div><div class="phase"><span class="phase-tag">Staging + Collection</span><ul class="bl"><li>The actor staged data under <code>C:\Windows\Logs\CBS</code> and applied Hidden/System attributes to reduce visibility. Using xcopy with recursive copy parameters (/E /I /H /Y), the actor replicated internal share contents into subdirectories (it-admin, shipping) and aggregated high-value datasets including email archives, customs/shipping documentation, contracts, financial data, and an administrative credential export file (IT-Admin-Passwords.csv).</li></ul></div><div class="phase"><span class="phase-tag">Compression + Exfiltration</span><ul class="bl"><li>Staged data was compressed into multiple archives (.zip and .tar.gz) and transferred externally using curl.exe multipart uploads to https://file.io. This technique provides a low-friction, scriptable exfiltration path and minimises custom tooling requirements. The actor also maintained HTTP-based tasking/beaconing with the external server 78.141.196.6 over port 8880 during the staging and exfiltration window.</li></ul></div><div class="phase"><span class="phase-tag">Credential Access + Persistence + Anti-Forensics</span><ul class="bl"><li>Credential theft intent was confirmed by execution of a renamed dumping utility (pd.exe) to generate an LSASS memory dump (lsass.dmp), which was subsequently uploaded externally. Persistence was established by creating a registry Run key value (FileShareSync) configured to execute a hidden PowerShell script (svchost.ps1) at startup. To reduce traceability, the actor deleted the PSReadLine history file ConsoleHost_history.txt, which normally records interactive PowerShell commands across sessions.</li></ul></div></div>
+</div>
+<div class="section" id="impact">
+<div class="section-header">
+  <span class="sh-num">08</span>
+  <span class="sh-title">IMPACT</span>
+</div>
+<div class="section-body"><div class="impact-wrap"><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Confirmed unauthorised staging and exfiltration of multiple datasets from internal file shares (contracts, financial, shipping, and IT administration).</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Credential exposure risk: IT-Admin-Passwords.csv created in staging; LSASS memory dump created and exfiltrated.</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Persistence established on AZUKI-FILESERVER01 via HKLM Run key value FileShareSync launching a hidden PowerShell script.</span></div><div class="impact-row conf"><span class="ibadge conf">Confirmed</span><span>Forensic visibility reduced by deletion of PowerShell history artefacts (ConsoleHost_history.txt).</span></div></div><div class="risk critical"><span class="risk-lbl">Risk: CRITICAL</span><span>Confirmed data exfiltration combined with credential dumping activity and persistence on a core file server significantly increases the likelihood of continued unauthorised access, lateral movement, and secondary compromise across the environment.</span></div></div>
+</div>
+<div class="section" id="intel">
+<div class="section-header">
+  <span class="sh-num">09</span>
+  <span class="sh-title">THREAT INTELLIGENCE</span>
+</div>
+<div class="section-body"><p class="p"><strong>159.26.106.98 (Return Access Source)</strong> — Public enrichment identifies this address as associated with AS208172 (Proton AG) and located in London, United Kingdom. Use of VPN/hosting egress infrastructure is consistent with operator OPSEC and rotating access nodes between sessions.</p><p class="p"><strong>78.141.196.6 (Staging + C2 Server)</strong> — This IP was previously observed as attacker-controlled infrastructure and is associated with AS20473 (Vultr Holdings; 78.141.196.6.vultrusercontent.com). During follow-on activity, it supported both payload hosting (ex.ps1 retrieval via certutil) and ongoing HTTP tasking/beaconing observed via curl.exe against /api/tasks and /api/beacon endpoints.</p><p class="p"><strong>file.io (Exfiltration Destination)</strong> — A public file transfer service abused for rapid, scriptable exfiltration using multipart/form-data uploads. The actor uploaded multiple archives and an LSASS dump (lsass.dmp), consistent with data theft and credential harvesting objectives.</p><div class="sub"><div class="sub-label">Tools and Tradecraft Observed (host-based)</div><ul class="bl"><li>certutil.exe -urlcache -f for payload transfer into a non-standard staging directory (T1105).</li><li>xcopy.exe /E /I /H /Y for recursive staging while preserving directories and hidden files (T1119, T1074.001).</li><li>tar.exe and PowerShell archive operations to package staged content for transfer (T1074.001).</li><li>curl.exe with -F file=@... for multipart uploads to a web service (T1567).</li><li>reg.exe add to create HKLM Run key persistence (T1547.001).</li><li>attrib.exe +h +s to hide staging directory artefacts (T1564.001).</li><li>pd.exe (renamed ProcDump-style utility) used to create LSASS dump (T1003, T1036.003).</li><li>PowerShell PSReadLine history deletion to reduce evidence of interactive activity (T1070.003).</li></ul></div><div class="sub"><div class="sub-label">Malware / Payload Observations (based on paths + behaviour)</div><ul class="bl"><li>ex.ps1 was retrieved from external infrastructure and written under <code>C:\Windows\Logs\CBS</code>; likely used to facilitate staging and/or automation of collection tasks.</li><li>svchost.ps1 was configured for autostart execution at startup using a hidden PowerShell invocation; this represents an established persistence mechanism.</li><li>pd.exe executed with Sysinternals-style parameters (/accepteula, -ma) consistent with a renamed ProcDump-like tool used for LSASS dumping.</li></ul></div></div>
+</div>
+<div class="section" id="recs">
+<div class="section-header">
+  <span class="sh-num">10</span>
+  <span class="sh-title">RECOMMENDATIONS</span>
+</div>
+<div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate AZUKI-FILESERVER01 and AZUKI-SL to prevent additional staging, exfiltration, or lateral movement.</li><li>Reset credentials and revoke sessions for all potentially exposed accounts (at minimum: fileadmin, kenji.sato) and any accounts stored in IT-Admin-Passwords.csv.</li><li>Remove persistence: delete Run key value FileShareSync and quarantine <code>C:\Windows\System32\svchost.ps1</code>.</li><li>Preserve evidence: collect memory images and relevant logs (endpoint telemetry, Security logs, PowerShell logs where available) before system cleanup.</li><li>Block outbound connectivity to known attacker infrastructure and abuse destinations (78.141.196.6, file.io) via firewall/proxy controls.</li><li>Hunt across endpoints for indicators: ex.ps1, pd.exe, lsass.dmp, archives under <code>C:\Windows\Logs\CBS</code>, and similar hidden staging folders.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Assume credential compromise; conduct password resets for impacted user and service accounts, and rotate any secrets accessible from the file server.</li><li>Scope expansion: identify other hosts contacted via SMB and validate whether additional shares were staged or exfiltrated.</li><li>Deploy detections for curl.exe multipart uploads, certutil -urlcache downloads, attrib +h +s on abnormal paths, and reg.exe Run key creation.</li><li>Review administrative share permissions and audit share access patterns for abnormal bulk copy activity.</li><li>Validate no additional persistence exists (scheduled tasks, services, WMI subscriptions, startup folders).</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Enforce MFA and conditional access for privileged identities; restrict privileged account use on workstations and file servers.</li><li>Implement egress filtering and proxy controls to prevent direct uploads to public file transfer services.</li><li>Harden and monitor file servers: enable enhanced auditing for bulk copy and archive creation in sensitive directories.</li><li>Reduce LOLBin abuse surface by applying application control policies and monitoring high-risk binaries and suspicious command-line usage.</li><li>Improve centralised logging and tamper resistance for PowerShell telemetry and endpoint artefacts.</li></ul></div></div>
+</div>
+<div class="section" id="lessons">
+<div class="section-header">
+  <span class="sh-num">11</span>
+  <span class="sh-title">LESSONS LEARNED</span>
+</div>
+<div class="section-body"><ul class="bl"><li>Dwell time and infrastructure rotation highlight the need for behavioural detection beyond static IP blocks.</li><li>File servers are prime collection points; monitoring for recursive copy + compression behaviours provides high signal for data staging.</li><li>Public web services provide low-friction exfiltration paths; egress controls and SSL inspection/visibility are necessary to detect abuse.</li><li>Credential dumping attempts should trigger immediate credential rotation and privileged access reviews.</li><li>Deletion of PSReadLine history reinforces the need for centralised PowerShell logging that cannot be erased from endpoints.</li></ul></div>
+</div>
+<div class="section" id="kql">
+<div class="section-header">
+  <span class="sh-num">12</span>
+  <span class="sh-title">KQL QUERIES</span>
+</div>
+<div class="section-body"><div class="kql">
+<div class="kql-hd"><b>Q01</b> — Initial logon scoping to AZUKI endpoints</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where DeviceName contains "azuki"</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q02</b> — Validate RemoteInteractive/Network logons to AZUKI endpoints (return access)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-20) .. datetime(2025-11-23))
+| where DeviceName has "azuki"
+| where ActionType == "LogonSuccess"
+| where LogonType in ("RemoteInteractive", "Network")
+| project TimeGenerated, DeviceName, AccountName, RemoteIP, LogonType
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q03</b> — Validate logon success to azuki-sl with specific return IP</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-20) .. datetime(2025-11-23))
+| where DeviceName == "azuki-sl"
+| where ActionType == "LogonSuccess"
+| where RemoteIP == "159.26.106.98"
+| project TimeGenerated, DeviceName, AccountName, LogonType, RemoteIP, ActionType, FailureReason
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q04</b> — Process execution by compromised user kenji.sato on azuki-sl</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-20) .. datetime(2025-11-23))
+| where DeviceName == "azuki-sl"
+| where AccountName == "kenji.sato"
+| project TimeGenerated, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q05</b> — Process execution with HTTP URLs (tool transfer/C2)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-20) .. datetime(2025-11-23))
+| where DeviceName has "azuki-fileserver01"
+| where ProcessCommandLine has "http"
+| project TimeGenerated, AccountName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q06</b> — Process execution on fileserver01 (noise reduction — exclude SYSTEM)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| where AccountName != "system"</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q07</b> — Discovery commands on fileserver01 (arp, ipconfig, net, whoami)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where ProcessCommandLine has_any ("arp.exe", "ipconfig.exe", "net.exe", "net1.exe", "whoami.exe")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q08</b> — Privilege enumeration (whoami /priv /all /groups)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where ProcessCommandLine has_any ("whoami /priv", "whoami /all", "whoami /groups")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q09</b> — Process execution by fileadmin account on fileserver01</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where AccountName == "fileadmin"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q10</b> — PowerShell-initiated processes on fileserver01</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where InitiatingProcessFileName == "powershell.exe"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q11</b> — Pivot — validate host owning IP 10.1.0.188 via network events</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-23))
+| where LocalIP == "10.1.0.188"
+| project TimeGenerated, DeviceName, InitiatingProcessFileName, LocalIP, LocalPort, RemoteIP, RemotePort, Protocol
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q12</b> — Pivot — find network connections to 10.1.0.188 (SMB/lateral movement)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceNetworkEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-23))
+| where RemoteIP == "10.1.0.188"
+| project TimeGenerated, DeviceName, InitiatingProcessFileName, LocalIP, LocalPort, RemoteIP, RemotePort, Protocol
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q13</b> — Pivot — identify logon activity associated with IP 10.1.0.188</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceLogonEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-23))
+| where RemoteIP == "10.1.0.188"
+| project TimeGenerated, RemoteIP, DeviceName, AccountName, LogonType, ActionType</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q14</b> — Defense evasion — hide staging directory (attrib +h +s)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-19) .. datetime(2025-11-23))
+| where DeviceName == "azuki-sl"
+| where ProcessCommandLine contains "attrib.exe"
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q15</b> — Defense evasion — staging directory creation on fileserver01</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where ProcessCommandLine has_any ("mkdir", "New-Item", "attrib")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q16</b> — Collection/Staging — file creation in CBS staging directory</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where FolderPath startswith "C:\\Windows\\Logs\\CBS"
+| where ActionType in ("FileCreated","FileRenamed")
+| project TimeGenerated, DeviceName, AccountName, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q17</b> — Exfiltration — curl multipart upload (-F file=@)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceProcessEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where DeviceName == "azuki-fileserver01"
+| where FileName =~ "curl.exe"
+| where ProcessCommandLine has_any ("-F", "file=@")
+| project TimeGenerated, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q18</b> — Persistence — Run key modification (HKLM\...\Run)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceRegistryEvents
+| where TimeGenerated between (datetime(2025-11-22) .. datetime(2025-11-23))
+| where RegistryKey has @" CurrentVersion\Run"
+| where ActionType == "RegistryValueSet"
+| project TimeGenerated, DeviceName, AccountName, RegistryKey, RegistryValueName, RegistryValueData, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div><div class="kql">
+<div class="kql-hd"><b>Q19</b> — Anti-forensics — PowerShell history deletion (ConsoleHost_history.txt)</div>
+<div class="kql-wrap">
+  <div class="kql-bar"><div class="kql-dots"><i></i><i></i><i></i></div><span class="kql-tag">KQL</span></div>
+  <pre>DeviceFileEvents
+| where TimeGenerated between (datetime(2025-11-20) .. datetime(2025-11-23))
+| where ActionType == "FileDeleted"
+| where FolderPath has "PSReadLine"
+| project TimeGenerated, DeviceName, AccountName, ActionType, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by TimeGenerated asc</pre>
+</div></div></div>
+</div>
+<div class="foot">
+  <span class="foot-conf">CONFIDENTIAL</span>
+  <span>Azuki — Follow-On Intrusion &nbsp;·&nbsp; Yousef Nabil &nbsp;·&nbsp; February 18, 2026</span>
+</div>
+</main>
+</div>
+
+
+<script>
+(function(){
+  const links = document.querySelectorAll('.nav-link');
+  const ids = Array.from(links).map(l=>l.getAttribute('href').slice(1));
+  const els = ids.map(id=>document.getElementById(id)).filter(Boolean);
+  function tick(){
+    const y = window.scrollY + 80;
+    let cur = els[0];
+    for(const e of els){ if(e && e.offsetTop<=y) cur=e; }
+    links.forEach(l=>l.classList.toggle('active', cur && l.getAttribute('href')==='#'+cur.id));
+  }
+  window.addEventListener('scroll', tick, {passive:true});
+  tick();
+})();
+</script>
+
+</body>
+</html>

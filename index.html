@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incident Response Reports - Yousef Nabil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:        #080a0d;
+  --bg2:       #0c0f14;
+  --surface:   #101520;
+  --border:    rgba(255,200,80,0.07);
+  --border2:   rgba(255,200,80,0.14);
+  --amber:     #f0a500;
+  --amber-dim: rgba(240,165,0,0.10);
+  --red:       #e84040;
+  --text:      #d4d8e0;
+  --text2:     #7a8090;
+  --text3:     #3a4050;
+  --mono:      'JetBrains Mono', monospace;
+  --cond:      'Barlow Condensed', sans-serif;
+  --sans:      'Barlow', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255,200,80,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 40px 80px;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-top: 3px solid var(--amber);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle at top right, rgba(240,165,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--amber);
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-family: var(--cond);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.intro {
+  font-size: 13.5px;
+  color: var(--text2);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.reports-grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.report-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  padding: 24px 28px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.report-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(240,165,0,0.03) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.report-card:hover {
+  border-left-color: var(--amber);
+  transform: translateX(4px);
+  background: rgba(240,165,0,0.03);
+}
+
+.report-card:hover::before {
+  opacity: 1;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.report-id {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  background: rgba(240,165,0,0.12);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.report-severity {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.sev-critical {
+  background: var(--red);
+  color: #fff;
+}
+
+.sev-high {
+  background: #8a4800;
+  color: var(--amber);
+  border: 1px solid var(--amber);
+}
+
+.report-title {
+  font-family: var(--cond);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
+}
+
+.report-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.report-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.meta-item {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-item strong {
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.footer-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+}
+
+.footer-link {
+  color: var(--amber);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.footer-link:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 40px 20px;
+  }
+  
+  h1 {
+    font-size: 32px;
+  }
+  
+  .report-card {
+    padding: 20px 22px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <div class="eyebrow">SOC ANALYST PORTFOLIO</div>
+        <h1>Incident Response Reports</h1>
+        <div class="subtitle">Real-World Security Investigation Case Studies</div>
+        <p class="intro">
+          As part of my cybersecurity training and SOC analyst development, I've investigated multiple security incidents 
+          through hands-on CTF scenarios that simulate real-world attacks. These comprehensive reports demonstrate my ability 
+          to conduct digital forensics, analyze threat actor behavior, identify IOCs, and document security incidents following 
+          industry best practices.
+        </p>
+      </div>
+    </div>
+
+    <div class="reports-grid">
+      <!-- AZUKI-001 -->
+      <a href="AZUKI-001_IR-Report.html" class="report-card">
+        <div class="report-header">
+          <span class="report-id">AZUKI-001</span>
+          <span class="report-severity sev-critical">CRITICAL</span>
+        </div>
+        <h2 class="report-title">Targeted Intrusion - Azuki Import/Export</h2>
+        <p class="report-desc">
+          Investigation of a targeted intrusion involving RDP compromise, credential dumping with Mimikatz, 
+          lateral movement, data exfiltration, and anti-forensic log clearing. Comprehensive analysis of 
+          attacker TTPs and defense evasion techniques.
+        </p>
+        <div class="report-meta">
+          <span class="meta-item"><strong>Techniques:</strong> Initial Access, Defense Evasion, Credential Dumping</span>
+          <span class="meta-item"><strong>Tools:</strong> Mimikatz, PowerShell, Certutil</span>
+        </div>
+      </a>
+
+      <!-- AZUKI-ADMINPC -->
+      <a href="AZUKI-ADMINPC_IR-Report.html" class="report-card">
+        <div class="report-header">
+          <span class="report-id">AZUKI-ADMINPC</span>
+          <span class="report-severity sev-critical">CRITICAL</span>
+        </div>
+        <h2 class="report-title">Admin PC Compromise - Azuki Import/Export</h2>
+        <p class="report-desc">
+          Deep-dive investigation into an administrator workstation compromise. Analysis covers privilege 
+          escalation, persistence mechanisms, command and control communications, and the full attack lifecycle 
+          on a high-value target.
+        </p>
+        <div class="report-meta">
+          <span class="meta-item"><strong>Techniques:</strong> Privilege Escalation, Persistence, C2</span>
+          <span class="meta-item"><strong>Focus:</strong> High-Value Target Analysis</span>
+        </div>
+      </a>
+
+      <!-- AZUKI-Q4-02 -->
+      <a href="AZUKI-Q4-02_IR-Report.html" class="report-card">
+        <div class="report-header">
+          <span class="report-id">AZUKI-Q4-02</span>
+          <span class="report-severity sev-critical">CRITICAL</span>
+        </div>
+        <h2 class="report-title">Q4 2025 Security Incident - Azuki Import/Export</h2>
+        <p class="report-desc">
+          Investigation of a sophisticated attack campaign during Q4 2025. Detailed timeline reconstruction, 
+          KQL hunting queries, and comprehensive MITRE ATT&CK framework mapping of observed adversary behaviors 
+          across the kill chain.
+        </p>
+        <div class="report-meta">
+          <span class="meta-item"><strong>Period:</strong> Q4 2025</span>
+          <span class="meta-item"><strong>Framework:</strong> MITRE ATT&CK Mapping</span>
+        </div>
+      </a>
+
+      <!-- BROKER-001 -->
+      <a href="BROKER-001_IR-Report.html" class="report-card">
+        <div class="report-header">
+          <span class="report-id">BROKER-001</span>
+          <span class="report-severity sev-high">HIGH</span>
+        </div>
+        <h2 class="report-title">Financial Services Security Breach</h2>
+        <p class="report-desc">
+          Incident response investigation for a brokerage firm security breach. Analysis includes network 
+          intrusion detection, financial data access patterns, threat actor infrastructure analysis, and 
+          recommendations for security hardening in financial environments.
+        </p>
+        <div class="report-meta">
+          <span class="meta-item"><strong>Sector:</strong> Financial Services</span>
+          <span class="meta-item"><strong>Focus:</strong> Data Protection, Network Analysis</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p class="footer-text">
+      Yousef Nabil | SOC Analyst in Training | 
+      <a href="https://github.com/yourusername" class="footer-link" target="_blank">GitHub</a>
+    </p>
+  </div>
+</body>
+</html>
