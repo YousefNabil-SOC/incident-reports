@@ -46,7 +46,7 @@
 }
 
 *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
-html { font-size:15px; scroll-behavior:smooth; }
+html { font-size:16px; scroll-behavior:smooth; }
 
 body {
   font-family: var(--sans);
@@ -106,7 +106,7 @@ body::before {
 .sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
 
 /* ── LAYOUT ── */
-.layout { display:flex; padding-top:var(--top-h); position:relative; z-index:1; }
+.layout { display:flex; justify-content: center; padding-top:var(--top-h); position:relative; z-index:1; }
 
 /* ── SIDEBAR ── */
 .sidebar {
@@ -146,8 +146,8 @@ body::before {
 .main {
   margin-left:var(--nav-w);
   flex:1; min-width:0;
-  padding:36px 48px 80px 44px;
-  max-width:880px;
+  padding:36px 60px 80px 60px;
+  max-width:1100px; margin: 0 auto;
 }
 
 /* ── COVER ── */
@@ -473,6 +473,10 @@ code {
   <div class="cover-title">Azuki Import/Export<br><span style="font-weight:300;font-size:.65em;color:var(--text2)">Multi-Stage Intrusion — AZUKI-ADMINPC</span></div>
   <div class="cover-sub">AZUKI-IR-2025-1124-ADMINPC &nbsp;·&nbsp; Credential Theft &amp; Data Exfiltration &nbsp;·&nbsp; 2025-11-24</div>
   <div class="meta-row">
+<div class="meta-item">
+  <div class="meta-key">ESCALATED TO</div>
+  <div class="meta-val">Josh — Cyber Range Community</div>
+</div>
     <div class="meta-item"><div class="meta-key">Incident ID</div><div class="meta-val">AZUKI-IR-2025-1124-ADMINPC</div></div>
     <div class="meta-item"><div class="meta-key">Date of Report</div><div class="meta-val">2026-02-19</div></div>
     <div class="meta-item"><div class="meta-key">Severity</div><div class="meta-val crit">CRITICAL</div></div>
