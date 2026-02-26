@@ -443,6 +443,150 @@ code {
 ::-webkit-scrollbar { width:5px; height:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+
+/* ══════════════════════════════════════════════
+   ENHANCED MOBILE / PHONE RESPONSIVENESS
+   Targets: iPhone & Android portrait mode
+   ══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── Topbar ── */
+  .topbar {
+    padding: 8px 14px;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 0;
+    row-gap: 6px;
+  }
+  .tb-analyst {
+    border-right: none;
+    padding-right: 0;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border2);
+    padding-bottom: 7px;
+  }
+  .tb-name  { font-size: 13.5px; }
+  .tb-role  { font-size: 7.5px; letter-spacing: 1.4px; }
+  .tb-mid   { width: 100%; gap: 8px; }
+  .tb-id    { display: none; }
+  .tb-title { font-size: 12.5px; }
+  .sev      { font-size: 8px; padding: 2px 8px; flex-shrink: 0; }
+
+  /* ── Layout ── */
+  .layout {
+    flex-direction: column;
+    padding-top: 78px; /* taller topbar on mobile */
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 100% !important;
+    position: relative !important;
+    top: 0 !important;
+    height: auto !important;
+    max-height: 200px;
+    overflow-y: auto;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border2);
+  }
+  .nav-link       { padding: 6px 16px; font-size: 14px; }
+  .nav-section-label { padding: 10px 16px 5px; }
+
+  /* ── Main ── */
+  .main {
+    margin-left: 0 !important;
+    padding: 16px 14px 60px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Cover card ── */
+  .cover            { padding: 18px 16px; }
+  .cover-eyebrow    { font-size: 8px; letter-spacing: 2px; }
+  .cover-title      { font-size: 21px; }
+  .cover-sub        { font-size: 12.5px; margin-bottom: 16px; }
+  .meta-row         { grid-template-columns: 1fr 1fr; gap: 5px; }
+  .meta-key         { font-size: 7.5px; letter-spacing: 1px; }
+  .meta-val         { font-size: 12.5px; }
+
+  /* ── Section ── */
+  .sh-title   { font-size: 13px; letter-spacing: 1.8px; }
+
+  /* ── Prose ── */
+  .p          { font-size: 13.5px; line-height: 1.7; }
+
+  /* ── Tables ── */
+  .tbl-outer  { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table       { font-size: 12.5px; min-width: 380px; }
+  thead th    { padding: 7px 10px !important; font-size: 7.5px; }
+  td          { padding: 6px 10px !important; font-size: 12.5px; }
+
+  /* ── KQL code blocks ── */
+  .kql-wrap {
+    overflow: hidden !important;
+  }
+  .kql-wrap pre {
+    font-size: 10.5px !important;
+    line-height: 1.6 !important;
+    padding: 10px 12px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre !important;
+  }
+  .kql-hd     { font-size: 11px; }
+  .kql-hd b   { font-size: 10.5px; }
+
+  /* ── Timeline ── */
+  .tl         { padding-left: 14px; }
+  .tl-row     { flex-direction: column; gap: 2px; }
+  .tl-t       { min-width: unset !important; font-size: 9.5px; padding-top: 0; }
+  .tl-e       { font-size: 13px; }
+
+  /* ── Lists ── */
+  .bl li      { font-size: 13px; padding: 7px 10px 7px 10px; }
+  .bl li::before { font-size: 13px; }
+
+  /* ── Impact ── */
+  .impact-row { font-size: 13px; padding: 8px 11px; }
+  .ibadge     { font-size: 7.5px; }
+
+  /* ── Risk banner ── */
+  .risk       { font-size: 13px; flex-direction: column; gap: 5px; padding: 10px 12px; }
+  .risk-lbl   { font-size: 8.5px; }
+
+  /* ── Rec groups ── */
+  .rec-badge  { font-size: 8px; padding: 3px 8px; }
+
+  /* ── Code inline ── */
+  code        { font-size: 10px; padding: 1px 4px; }
+
+  /* ── Phase tag ── */
+  .phase-tag  { font-size: 8.5px; }
+
+  /* ── Sub-section ── */
+  .sub-label  { font-size: 8px; letter-spacing: 1.4px; }
+
+  /* ── Footer strip ── */
+  .foot {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    padding-top: 14px;
+  }
+
+}
+
+/* Very small screens (SE, small Android) */
+@media (max-width: 390px) {
+  .cover-title  { font-size: 18px; }
+  .meta-row     { grid-template-columns: 1fr; }
+  .kql-wrap pre { font-size: 9.5px !important; }
+  .tb-title     { display: none; }
+}
 </style>
 </head>
 <body>
@@ -491,6 +635,7 @@ code {
     <div class="meta-item"><div class="meta-key">Date of Report</div><div class="meta-val">February 18, 2026</div></div>
     <div class="meta-item"><div class="meta-key">Severity</div><div class="meta-val crit">CRITICAL</div></div>
     <div class="meta-item"><div class="meta-key">Report Status</div><div class="meta-val">Investigation Complete (Post-Incident Review)</div></div>
+    <div class="meta-item"><div class="meta-key">Escalated To</div><div class="meta-val">Incident Response Lead</div></div>
     <div class="meta-item"><div class="meta-key">Analyst</div><div class="meta-val">Yousef Nabil</div></div>
   </div>
 </div>
