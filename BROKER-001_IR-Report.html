@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>BROKER-001 — Yousef Nabil</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg:        #080a0d;
-  --bg2:       #0c0f14;
-  --surface:   #101520;
-  --surface2:  #141a24;
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border2); }
+  .main { margin-left: 0; padding: 20px 16px 60px; }
+  .layout { flex-direction: column; }
+  .nav-w { --nav-w: 100%; }
+  html { font-size: 16px; }
+  .topbar { flex-wrap: wrap; height: auto; min-height: var(--top-h); padding: 12px 16px; }
+  .tb-analyst { border-right: none; padding-right: 0; margin-bottom: 8px; }
+}
+  --bg:        #1a1d26;
+  --bg2:       #22262f;
+  --surface:   #2a2f3c;
+  --surface2:  #323948;
   --border:    rgba(255,200,80,0.07);
   --border2:   rgba(255,200,80,0.14);
   --border3:   rgba(255,200,80,0.25);
@@ -26,9 +37,9 @@
   --blue-dim:  rgba(74,158,255,0.10);
   --purple:    #a78bfa;
   --purple-dim:rgba(167,139,250,0.10);
-  --text:      #d4d8e0;
-  --text2:     #7a8090;
-  --text3:     #3a4050;
+  --text:      #e8eaf2;
+  --text2:     #b5bcc8;
+  --text3:     #7a8090;
   --mono:      'JetBrains Mono', monospace;
   --cond:      'Barlow Condensed', sans-serif;
   --sans:      'Barlow', sans-serif;
@@ -38,7 +49,7 @@
 }
 
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size:14px; scroll-behavior:smooth; }
+html { font-size:15px; scroll-behavior:smooth; }
 
 body {
   font-family:var(--sans);
@@ -74,7 +85,7 @@ body::before {
 .tb-role { font-family:var(--mono); font-size:8.5px; font-weight:400; letter-spacing:1.8px; text-transform:uppercase; color:var(--text3); }
 .tb-mid  { flex:1; display:flex; align-items:center; gap:20px; }
 .tb-id   { font-family:var(--mono); font-size:11px; color:var(--text3); letter-spacing:.5px; }
-.tb-title { font-family:var(--cond); font-size:13px; font-weight:500; color:var(--text2); letter-spacing:.3px; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tb-title { font-family:var(--cond); font-size:14.5px; font-weight:500; color:var(--text2); letter-spacing:.3px; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sev { font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; border-radius:2px; }
 .sev-critical { background:var(--red); color:#fff; }
 .sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
@@ -160,7 +171,7 @@ body::before {
 .section { margin-bottom:2px; scroll-margin-top:calc(var(--top-h) + 16px); }
 .section-header { display:flex; align-items:center; gap:10px; padding:14px 0 10px; border-bottom:1px solid var(--border2); margin-bottom:16px; }
 .sh-num { font-family:var(--mono); font-size:9px; font-weight:600; color:var(--amber); opacity:.5; min-width:24px; }
-.sh-title { font-family:var(--cond); font-size:13px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--text2); }
+.sh-title { font-family:var(--cond); font-size:14.5px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--text2); }
 .sh-mitre { font-family:var(--mono); font-size:9px; color:var(--blue); opacity:.7; margin-left:auto; white-space:nowrap; }
 .section-body { padding-bottom:24px; }
 
@@ -169,13 +180,13 @@ body::before {
 .sub-label { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:1.8px; text-transform:uppercase; color:var(--amber); opacity:.65; padding-bottom:6px; margin-bottom:8px; border-bottom:1px solid var(--border); }
 
 /* ── PROSE ── */
-.p { font-size:13px; line-height:1.75; color:var(--text2); margin-bottom:10px; }
+.p { font-size:14.5px; line-height:1.75; color:var(--text2); margin-bottom:10px; }
 .p strong { color:var(--text); font-weight:600; }
 .p + .p { margin-top:-4px; }
 
 /* ── TABLE ── */
 .tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
-table { width:100%; border-collapse:collapse; font-size:12px; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
 thead tr { background:rgba(240,165,0,0.06); }
 thead th { font-family:var(--mono); font-size:8.5px; font-weight:500; letter-spacing:1.2px; text-transform:uppercase; color:var(--amber); opacity:.8; padding:9px 13px; text-align:left; border-bottom:1px solid var(--border2); white-space:nowrap; }
 tbody tr { border-bottom:1px solid var(--border); }
@@ -216,7 +227,7 @@ td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; 
   margin:10px 0;
 }
 .finding-label { font-family:var(--mono); font-size:8px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--amber); opacity:.6; margin-bottom:6px; }
-.finding-val { font-family:var(--mono); font-size:12px; color:var(--text); word-break:break-all; }
+.finding-val { font-family:var(--mono); font-size:13.5px; color:var(--text); word-break:break-all; }
 .finding.red   { border-left-color:var(--red); }
 .finding.red .finding-label { color:var(--red); }
 .finding.blue  { border-left-color:var(--blue); }

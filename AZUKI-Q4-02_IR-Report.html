@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>AZUKI-2025-Q4-02 — Yousef Nabil</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg:        #080a0d;
-  --bg2:       #0c0f14;
-  --surface:   #101520;
-  --surface2:  #141a24;
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border2); }
+  .main { margin-left: 0; padding: 20px 16px 60px; }
+  .layout { flex-direction: column; }
+  .nav-w { --nav-w: 100%; }
+  html { font-size: 16px; }
+  .topbar { flex-wrap: wrap; height: auto; min-height: var(--top-h); padding: 12px 16px; }
+  .tb-analyst { border-right: none; padding-right: 0; margin-bottom: 8px; }
+}
+  --bg:        #1a1d26;
+  --bg2:       #22262f;
+  --surface:   #2a2f3c;
+  --surface2:  #323948;
   --border:    rgba(255,200,80,0.07);
   --border2:   rgba(255,200,80,0.14);
   --border3:   rgba(255,200,80,0.25);
@@ -23,9 +34,9 @@
   --green:     #2ecc71;
   --green-dim: rgba(46,204,113,0.10);
   --blue:      #4a9eff;
-  --text:      #d4d8e0;
-  --text2:     #7a8090;
-  --text3:     #3a4050;
+  --text:      #e8eaf2;
+  --text2:     #b5bcc8;
+  --text3:     #7a8090;
   --mono:      'JetBrains Mono', monospace;
   --cond:      'Barlow Condensed', sans-serif;
   --sans:      'Barlow', sans-serif;
@@ -35,7 +46,7 @@
 }
 
 *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
-html { font-size:14px; scroll-behavior:smooth; }
+html { font-size:15px; scroll-behavior:smooth; }
 
 body {
   font-family: var(--sans);
@@ -82,7 +93,7 @@ body::before {
   letter-spacing:.5px;
 }
 .tb-title {
-  font-family:var(--cond); font-size:13px; font-weight:500;
+  font-family:var(--cond); font-size:14.5px; font-weight:500;
   color:var(--text2); letter-spacing:.3px;
   flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
@@ -114,7 +125,7 @@ body::before {
 .nav-link {
   display:flex; align-items:center; gap:10px;
   padding:7px 18px; text-decoration:none;
-  color:var(--text3); font-size:12px; font-weight:400;
+  color:var(--text3); font-size:13.5px; font-weight:400;
   font-family:var(--sans);
   border-left:2px solid transparent;
   transition:all .12s ease;
@@ -208,7 +219,7 @@ body::before {
   color:var(--amber); opacity:.5; min-width:24px;
 }
 .sh-title {
-  font-family:var(--cond); font-size:13px; font-weight:700;
+  font-family:var(--cond); font-size:14.5px; font-weight:700;
   letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
 }
 .section-body { padding-bottom:24px; }
@@ -225,7 +236,7 @@ body::before {
 
 /* ── PROSE ── */
 .p {
-  font-size:13px; line-height:1.75; color:var(--text2);
+  font-size:14.5px; line-height:1.75; color:var(--text2);
   margin-bottom:10px;
 }
 .p strong { color:var(--text); font-weight:600; }
@@ -233,7 +244,7 @@ body::before {
 
 /* ── TABLE ── */
 .tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
-table { width:100%; border-collapse:collapse; font-size:12px; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
 thead tr { background:rgba(240,165,0,0.06); }
 thead th {
   font-family:var(--mono); font-size:8.5px; font-weight:500;
@@ -541,6 +552,29 @@ code {
 </div>
 <div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate AZUKI-FILESERVER01 and AZUKI-SL to prevent additional staging, exfiltration, or lateral movement.</li><li>Reset credentials and revoke sessions for all potentially exposed accounts (at minimum: fileadmin, kenji.sato) and any accounts stored in IT-Admin-Passwords.csv.</li><li>Remove persistence: delete Run key value FileShareSync and quarantine <code>C:\Windows\System32\svchost.ps1</code>.</li><li>Preserve evidence: collect memory images and relevant logs (endpoint telemetry, Security logs, PowerShell logs where available) before system cleanup.</li><li>Block outbound connectivity to known attacker infrastructure and abuse destinations (78.141.196.6, file.io) via firewall/proxy controls.</li><li>Hunt across endpoints for indicators: ex.ps1, pd.exe, lsass.dmp, archives under <code>C:\Windows\Logs\CBS</code>, and similar hidden staging folders.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Assume credential compromise; conduct password resets for impacted user and service accounts, and rotate any secrets accessible from the file server.</li><li>Scope expansion: identify other hosts contacted via SMB and validate whether additional shares were staged or exfiltrated.</li><li>Deploy detections for curl.exe multipart uploads, certutil -urlcache downloads, attrib +h +s on abnormal paths, and reg.exe Run key creation.</li><li>Review administrative share permissions and audit share access patterns for abnormal bulk copy activity.</li><li>Validate no additional persistence exists (scheduled tasks, services, WMI subscriptions, startup folders).</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Enforce MFA and conditional access for privileged identities; restrict privileged account use on workstations and file servers.</li><li>Implement egress filtering and proxy controls to prevent direct uploads to public file transfer services.</li><li>Harden and monitor file servers: enable enhanced auditing for bulk copy and archive creation in sensitive directories.</li><li>Reduce LOLBin abuse surface by applying application control policies and monitoring high-risk binaries and suspicious command-line usage.</li><li>Improve centralised logging and tamper resistance for PowerShell telemetry and endpoint artefacts.</li></ul></div></div>
 </div>
+<div class="section" id="escalation">
+<div class="section-header">
+  <span class="sh-num">●</span>
+  <span class="sh-title">INCIDENT ESCALATION</span>
+</div>
+<div class="section-body">
+<div class="meta-row">
+<div class="meta-item">
+  <div class="meta-key">ESCALATED TO</div>
+  <div class="meta-val">Josh Madakor — Senior SOC Manager</div>
+</div>
+<div class="meta-item">
+  <div class="meta-key">ESCALATION DATE</div>
+  <div class="meta-val">February 26, 2026</div>
+</div>
+<div class="meta-item">
+  <div class="meta-key">STATUS</div>
+  <div class="meta-val crit">UNDER INVESTIGATION</div>
+</div>
+</div>
+</div>
+</div>
+
 <div class="section" id="lessons">
 <div class="section-header">
   <span class="sh-num">11</span>

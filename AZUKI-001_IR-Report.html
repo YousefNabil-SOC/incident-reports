@@ -2,16 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>AZUKI-001 — Yousef Nabil</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg:        #080a0d;
-  --bg2:       #0c0f14;
-  --surface:   #101520;
-  --surface2:  #141a24;
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border2); }
+  .main { margin-left: 0; padding: 20px 16px 60px; }
+  .layout { flex-direction: column; }
+  .nav-w { --nav-w: 100%; }
+  html { font-size: 16px; }
+  .topbar { flex-wrap: wrap; height: auto; min-height: var(--top-h); padding: 12px 16px; }
+  .tb-analyst { border-right: none; padding-right: 0; margin-bottom: 8px; }
+}
+  --bg:        #1a1d26;
+  --bg2:       #22262f;
+  --surface:   #2a2f3c;
+  --surface2:  #323948;
   --border:    rgba(255,200,80,0.07);
   --border2:   rgba(255,200,80,0.14);
   --border3:   rgba(255,200,80,0.25);
@@ -23,9 +34,9 @@
   --green:     #2ecc71;
   --green-dim: rgba(46,204,113,0.10);
   --blue:      #4a9eff;
-  --text:      #d4d8e0;
-  --text2:     #7a8090;
-  --text3:     #3a4050;
+  --text:      #e8eaf2;
+  --text2:     #b5bcc8;
+  --text3:     #7a8090;
   --mono:      'JetBrains Mono', monospace;
   --cond:      'Barlow Condensed', sans-serif;
   --sans:      'Barlow', sans-serif;
@@ -35,7 +46,7 @@
 }
 
 *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
-html { font-size:14px; scroll-behavior:smooth; }
+html { font-size:15px; scroll-behavior:smooth; }
 
 body {
   font-family: var(--sans);
@@ -82,7 +93,7 @@ body::before {
   letter-spacing:.5px;
 }
 .tb-title {
-  font-family:var(--cond); font-size:13px; font-weight:500;
+  font-family:var(--cond); font-size:14.5px; font-weight:500;
   color:var(--text2); letter-spacing:.3px;
   flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
@@ -114,7 +125,7 @@ body::before {
 .nav-link {
   display:flex; align-items:center; gap:10px;
   padding:7px 18px; text-decoration:none;
-  color:var(--text3); font-size:12px; font-weight:400;
+  color:var(--text3); font-size:13.5px; font-weight:400;
   font-family:var(--sans);
   border-left:2px solid transparent;
   transition:all .12s ease;
@@ -208,7 +219,7 @@ body::before {
   color:var(--amber); opacity:.5; min-width:24px;
 }
 .sh-title {
-  font-family:var(--cond); font-size:13px; font-weight:700;
+  font-family:var(--cond); font-size:14.5px; font-weight:700;
   letter-spacing:2.5px; text-transform:uppercase; color:var(--text2);
 }
 .section-body { padding-bottom:24px; }
@@ -225,7 +236,7 @@ body::before {
 
 /* ── PROSE ── */
 .p {
-  font-size:13px; line-height:1.75; color:var(--text2);
+  font-size:14.5px; line-height:1.75; color:var(--text2);
   margin-bottom:10px;
 }
 .p strong { color:var(--text); font-weight:600; }
@@ -233,7 +244,7 @@ body::before {
 
 /* ── TABLE ── */
 .tbl-outer { overflow-x:auto; margin:8px 0 14px; border-radius:var(--radius); border:1px solid var(--border2); }
-table { width:100%; border-collapse:collapse; font-size:12px; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
 thead tr { background:rgba(240,165,0,0.06); }
 thead th {
   font-family:var(--mono); font-size:8.5px; font-weight:500;
@@ -541,6 +552,29 @@ code {
 </div>
 <div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate azuki-sl from the network to prevent continued C2, exfiltration, or lateral movement attempts.</li><li>Disable/reset kenji.sato credentials immediately and treat all credentials used on azuki-sl as exposed due to confirmed LSASS dumping activity.</li><li>Remove persistence on azuki-sl: delete scheduled task "Windows Update Check"; remove/disable the backdoor local account support (and validate no other local admin accounts were created).</li><li>Contain attacker infrastructure: block 78.141.196.6 at perimeter controls and hunt enterprise-wide for any communication attempts to this IP over :8080 and :443.</li><li>Preserve volatile and on-disk artefacts before cleanup: collect the full contents of <code>C:\ProgramData\WindowsCache</code> and export relevant Sentinel/MDE logs for chain-of-custody where applicable.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Scope lateral movement risk: prioritise investigation of 10.1.0.188 for logons, new processes, scheduled tasks, Defender setting changes, and any evidence of credential reuse from azuki-sl.</li><li>Hunt for the same tradecraft across endpoints, specifically: Defender exclusion registry changes (Extensions and Paths); certutil -urlcache -f http usage; scheduled tasks executing binaries from ProgramData staging paths; wevtutil cl Security or other event log clearing behaviour.</li><li>Review network egress and proxy telemetry for Discord webhook patterns and identify whether similar webhook uploads occurred from other hosts.</li><li>Validate Defender posture on impacted systems: remove malicious exclusions and confirm protections are restored for scripts/executables and Temp paths.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Reduce RDP exposure and credential replay risk: restrict RemoteInteractive access paths to only approved sources and enforce stronger authentication controls for remote access.</li><li>Harden endpoint controls against LOLBIN transfer and disguised persistence: establish detections/blocks for suspicious certutil download patterns, scheduled tasks running from non-standard directories, and svchost-named binaries executing outside System32.</li><li>Implement durable monitoring for credential dumping: alert on command-line indicators like sekurlsa::logonpasswords and suspicious debug privilege enabling where feasible.</li><li>Improve anti-forensics visibility: implement monitoring and alerting for event log clearing and correlate with remote logons, task creation, and outbound connections.</li><li>Data protection governance: review and strengthen controls around storage/handling of supplier contracts and pricing artefacts to reduce blast radius if a single workstation is compromised.</li></ul></div></div>
 </div>
+<div class="section" id="escalation">
+<div class="section-header">
+  <span class="sh-num">●</span>
+  <span class="sh-title">INCIDENT ESCALATION</span>
+</div>
+<div class="section-body">
+<div class="meta-row">
+<div class="meta-item">
+  <div class="meta-key">ESCALATED TO</div>
+  <div class="meta-val">Josh Madakor — Senior SOC Manager</div>
+</div>
+<div class="meta-item">
+  <div class="meta-key">ESCALATION DATE</div>
+  <div class="meta-val">February 26, 2026</div>
+</div>
+<div class="meta-item">
+  <div class="meta-key">STATUS</div>
+  <div class="meta-val crit">UNDER INVESTIGATION</div>
+</div>
+</div>
+</div>
+</div>
+
 <div class="section" id="lessons">
 <div class="section-header">
   <span class="sh-num">11</span>
