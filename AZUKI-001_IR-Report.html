@@ -264,7 +264,7 @@ td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; 
   list-style:none;
   border:1px solid var(--border);
   border-radius:var(--radius);
-  overflow:hidden; margin:6px 0;
+   margin:6px 0;
 }
 .bl li {
   display:flex; align-items:flex-start; gap:9px;
@@ -371,7 +371,7 @@ td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; 
 .impact-row:first-child { border-radius:var(--radius) var(--radius) 0 0; }
 .impact-row:last-child  { border-bottom:none; border-radius:0 0 var(--radius) var(--radius); }
 .impact-row.conf { border-left-color:var(--red); }
-.impact-wrap { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:6px 0; background:var(--surface); }
+.impact-wrap { border:1px solid var(--border); border-radius:var(--radius); margin:6px 0; background:var(--surface); }
 .ibadge {
   font-family:var(--mono); font-size:8px; font-weight:700;
   letter-spacing:1.2px; text-transform:uppercase;
@@ -555,27 +555,6 @@ code {
   <span class="sh-title">RECOMMENDATIONS</span>
 </div>
 <div class="section-body"><div class="rec-grp"><span class="rec-badge rb-now">Immediate</span><ul class="bl"><li>Isolate azuki-sl from the network to prevent continued C2, exfiltration, or lateral movement attempts.</li><li>Disable/reset kenji.sato credentials immediately and treat all credentials used on azuki-sl as exposed due to confirmed LSASS dumping activity.</li><li>Remove persistence on azuki-sl: delete scheduled task "Windows Update Check"; remove/disable the backdoor local account support (and validate no other local admin accounts were created).</li><li>Contain attacker infrastructure: block 78.141.196.6 at perimeter controls and hunt enterprise-wide for any communication attempts to this IP over :8080 and :443.</li><li>Preserve volatile and on-disk artefacts before cleanup: collect the full contents of <code>C:\ProgramData\WindowsCache</code> and export relevant Sentinel/MDE logs for chain-of-custody where applicable.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-short">Short-Term (24–48 Hours)</span><ul class="bl"><li>Scope lateral movement risk: prioritise investigation of 10.1.0.188 for logons, new processes, scheduled tasks, Defender setting changes, and any evidence of credential reuse from azuki-sl.</li><li>Hunt for the same tradecraft across endpoints, specifically: Defender exclusion registry changes (Extensions and Paths); certutil -urlcache -f http usage; scheduled tasks executing binaries from ProgramData staging paths; wevtutil cl Security or other event log clearing behaviour.</li><li>Review network egress and proxy telemetry for Discord webhook patterns and identify whether similar webhook uploads occurred from other hosts.</li><li>Validate Defender posture on impacted systems: remove malicious exclusions and confirm protections are restored for scripts/executables and Temp paths.</li></ul></div><div class="rec-grp"><span class="rec-badge rb-long">Long-Term (1–4 Weeks)</span><ul class="bl"><li>Reduce RDP exposure and credential replay risk: restrict RemoteInteractive access paths to only approved sources and enforce stronger authentication controls for remote access.</li><li>Harden endpoint controls against LOLBIN transfer and disguised persistence: establish detections/blocks for suspicious certutil download patterns, scheduled tasks running from non-standard directories, and svchost-named binaries executing outside System32.</li><li>Implement durable monitoring for credential dumping: alert on command-line indicators like sekurlsa::logonpasswords and suspicious debug privilege enabling where feasible.</li><li>Improve anti-forensics visibility: implement monitoring and alerting for event log clearing and correlate with remote logons, task creation, and outbound connections.</li><li>Data protection governance: review and strengthen controls around storage/handling of supplier contracts and pricing artefacts to reduce blast radius if a single workstation is compromised.</li></ul></div></div>
-</div>
-<div class="section-body">
-<div class="meta-row">
-<div class="meta-item">
-  <div class="meta-key">ESCALATED TO</div>
-  <div class="meta-val">Josh — Cyber Range Community</div>
-</div>
-<div class="meta-item">
-  <div class="meta-key">ESCALATED TO</div>
-  <div class="meta-val">Josh Madakor — Senior SOC Manager</div>
-</div>
-<div class="meta-item">
-  <div class="meta-key">ESCALATION DATE</div>
-  <div class="meta-val">February 26, 2026</div>
-</div>
-<div class="meta-item">
-  <div class="meta-key">STATUS</div>
-  <div class="meta-val crit">UNDER INVESTIGATION</div>
-</div>
-</div>
-</div>
 </div>
 
 <div class="section" id="lessons">
