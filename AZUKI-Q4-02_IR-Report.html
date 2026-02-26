@@ -9,10 +9,20 @@
 
 :root {
 
+/* ZOOM-PROOF RESPONSIVE LAYOUT */
+html { font-size: clamp(14px, 1vw + 12px, 18px); }
+.sidebar { width: clamp(200px, 16vw, 280px) !important; min-width: 200px; }
+.main { margin-left: clamp(200px, 16vw, 280px) !important; width: auto !important; max-width: none !important; }
+.layout { display: flex !important; width: 100% !important; }
+.bl { overflow: visible !important; }
+.kql-wrap { overflow: visible !important; }
+.section-body { overflow: visible !important; }
+body { overflow-x: hidden; }
+
 /* MOBILE RESPONSIVENESS */
 @media (max-width: 768px) {
   .sidebar { width: 100%; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--border2); }
-  .main { margin: 0 auto; position: relative; margin-left: 0; padding: 20px 16px 60px; }
+  .main { position: relative; min-width: 0; flex: 1; margin-left: 0; padding: 20px 16px 60px; }
   .layout { flex-direction: column; }
   .nav-w { --nav-w: 100%; }
   html { font-size: 16px; }
@@ -40,7 +50,7 @@
   --mono:      'JetBrains Mono', monospace;
   --cond:      'Barlow Condensed', sans-serif;
   --sans:      'Barlow', sans-serif;
-  --nav-w:     240px;
+  --nav-w:     16vw; --nav-w-min: 200px; --nav-w-max: 280px;
   --top-h:     48px;
   --radius:    4px;
 }
@@ -106,11 +116,11 @@ body::before {
 .sev-high     { background:#8a4800; color:#f0a500; border:1px solid var(--amber); }
 
 /* ── LAYOUT ── */
-.layout { display:flex; justify-content: center; padding-top:var(--top-h); position:relative; z-index:1; }
+.layout { display:flex; min-height: 100vh; padding-top:var(--top-h); position:relative; z-index:1; }
 
 /* ── SIDEBAR ── */
 .sidebar {
-  width:var(--nav-w); flex-shrink:0;
+  width: clamp(200px, 16vw, 280px); flex-shrink:0;
   position:fixed; top:var(--top-h); bottom:0; left:0;
   background:var(--bg2);
   border-right:1px solid var(--border2);
@@ -143,11 +153,11 @@ body::before {
 .nav-link.active .nav-idx { color:var(--amber); opacity:.6; }
 
 /* ── MAIN ── */
-.main { margin: 0 auto; position: relative;
-  margin-left:var(--nav-w);
+.main { position: relative; min-width: 0; flex: 1;
+  margin-left: clamp(200px, 16vw, 280px);
   flex:1; min-width:0;
-  padding:40px 70px 100px 70px;
-  max-width: 1400px; width: 92%; margin: 0 auto;
+  padding: 2.5rem 5% 6rem 5%;
+  max-width: none; width: calc(100% - 280px); margin: 0 auto;
 }
 
 /* ── COVER ── */
@@ -263,7 +273,7 @@ td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; 
 .bl {
   list-style:none;
   border:1px solid var(--border);
-  border-radius:var(--radius);
+  border-radius:var(--radius); overflow:visible;
    margin:6px 0;
 }
 .bl li {
@@ -333,8 +343,8 @@ td { padding:7px 13px; color:var(--text2); vertical-align:top; line-height:1.5; 
 .kql-wrap {
   background:#05080d;
   border:1px solid rgba(240,165,0,0.15);
-  border-radius:var(--radius);
-  overflow:hidden;
+  border-radius:var(--radius); overflow:visible;
+  overflow:visible;
 }
 .kql-bar {
   background:rgba(240,165,0,0.05);
